@@ -2,7 +2,7 @@ import { prisma } from '$lib/db/client';
 import type { User } from '@prisma/client';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';
-import { hash } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 // Converts a user account to a permanent account
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -53,7 +53,7 @@ const convertUserToPermanent = async (userId: string, data: Pick<User, 'email' |
   await prisma.$transaction([
     prisma.account.create({
       data: {
-        password: await hash(data.password, 10),
+        password: await bcrypt.hash(data.password, 10),
         user: { connect: { id: userId } },
       },
     }),

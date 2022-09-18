@@ -1,7 +1,7 @@
 import { prisma } from '$lib/db/client';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';
-import { compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { USER_ID_COOKIE } from '$lib/constants';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
@@ -40,7 +40,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   const { account, ...user } = dbResult;
 
-  if (!account || !(await compare(result.data.password, account.password))) {
+  if (!account || !(await bcrypt.compare(result.data.password, account.password))) {
     throw error(401, 'Unauthorized');
   }
 
