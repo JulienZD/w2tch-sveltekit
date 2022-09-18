@@ -26,8 +26,9 @@
         <a class="mt-2 btn btn-primary" href="/overview">To my watch lists</a>
       {:else}
         <a class="btn btn-primary" href="/new">Get started</a>
+        <p class="text-sm mt-2">Already have an account? <a class="link-primary" href="/login">Login</a></p>
       {/if}
     </div>
-    <div class="w-56 sm:block hidden"></div>
+    <div class="w-56 sm:block hidden" />
   </div>
 </div>

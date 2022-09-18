@@ -16,6 +16,7 @@
       body: JSON.stringify({
         email,
         name,
+        password,
       }),
     });
     if (!response.ok) {
