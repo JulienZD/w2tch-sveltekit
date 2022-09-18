@@ -6,6 +6,9 @@ module.exports = {
     container: {
       center: true,
     },
+    fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [require('daisyui')],
