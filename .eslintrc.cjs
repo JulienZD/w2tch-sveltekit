@@ -20,7 +20,16 @@ module.exports = {
   rules: {
     quotes: ['error', 'single', { avoidEscape: true }],
     'prettier/prettier': ['error'],
-    'comma-dangle': ['error', 'always-multiline'],
+    'comma-dangle': [
+      'error',
+      {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+        exports: 'always-multiline',
+        functions: 'only-multiline',
+      },
+    ],
     'func-style': ['error', 'expression', { allowArrowFunctions: true }],
   },
 };
