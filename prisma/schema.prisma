@@ -25,13 +25,15 @@ model User {
 model WatchGroup {
   id        String @id @default(uuid())
 
+  name      String
+
   owner     User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId   String @unique
+  ownerId   String
   watchers  WatchersOnWatchGroups[]
   movies    MoviesOnWatchGroups[]
 
-  createdAt DateTime @default(now()) @ignore
-  updatedAt DateTime @updatedAt @ignore
+  createdAt DateTime? @default(now()) @ignore
+  updatedAt DateTime? @default(now()) @updatedAt @ignore
 }
 
 

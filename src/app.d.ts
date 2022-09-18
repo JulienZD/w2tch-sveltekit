@@ -3,7 +3,7 @@
 // and what to do when importing types
 declare namespace App {
   interface Locals {
-    user?: Pick<import('@prisma/client').User, 'email' | 'name', 'temporaryAccessExpiresOn'>;
+    user?: import('@prisma/client').User;
     temporaryAccountExpiresOn?: Date;
   }
   // interface PageData {}
