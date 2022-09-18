@@ -1,4 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import type { PageData } from './$types';
 
-<button class="btn">Hello World</button>
+  export let data: PageData;
+</script>
+
+<div class="grid place-content-center h-screen">
+  <h1 class="text-center text-5xl mb-4">Welcome</h1>
+
+  <p class="font-bold">User info:</p>
+  <pre>{JSON.stringify(data.user, undefined, 2)}</pre>
+</div>
