@@ -62,7 +62,7 @@ model WatchersOnWatchGroups {
 model Movie {
   id          String @id @default(uuid())
   name        String
-  imdbRating  Decimal
+  imdbRating  Decimal @db.Decimal(10, 2)
   imdbUrl     String @unique
   imageUrl    String
 
@@ -76,7 +76,7 @@ model MoviesOnWatchGroups {
   watchGroup  WatchGroup @relation(fields: [watchGroupId], references: [id], onDelete: Cascade)
   watchGroupId  String
 
-  seenOn  DateTime  @default(now())
+  seenOn  DateTime?
 
   @@id([movieId, watchGroupId])
 }
