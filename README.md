@@ -4,15 +4,15 @@ A simple SvelteKit app to create and share watchlists with your friends.
 
 ## Developing
 
-Install dependencies with `npm install`
+Install dependencies with yarn install`
 
 Start a development server:
 
 ```bash
-npm run dev
+yarn dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+yarn dev --open
 ```
 
 ## Building
@@ -20,7 +20,7 @@ npm run dev -- --open
 Creating a production version:
 
 ```bash
-npm run build
+yarn build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with `yarn preview`.
