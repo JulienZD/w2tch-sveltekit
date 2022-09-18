@@ -6,12 +6,11 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "db:migrate:prod": "prisma migrate deploy",
-    "db:migrate:dev": "prisma migrate dev",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "vercel-build": "DATABASE_URL=\"$DATABASE_URL_MIGRATE\" prisma migrate deploy && yarn build"
   },
   "devDependencies": {
     "@prisma/client": "^4.3.1",
