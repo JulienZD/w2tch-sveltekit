@@ -1,6 +1,9 @@
 <script lang="ts">
   import { tagline } from '$lib/data/seo';
   import SEO from '$lib/components/SEO.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
 </script>
 
 <SEO />
@@ -12,11 +15,18 @@
         Create <span class="text-gradient from-red-500 to-emerald-500">Movie Watchlists</span> with ease
       </h1>
       <div class="py-6">
-        <p>{tagline}</p>
-        <p class="mt-2">No account required.</p>
+        {#if data.user}
+          <p>Welcome back, {data.user.name}</p>
+        {:else}
+          <p>{tagline}</p>
+          <p class="mt-2">No account required.</p>
+        {/if}
       </div>
-
-      <a class="btn btn-primary" href="/new">Get started</a>
+      {#if data.user}
+        <a class="mt-2 btn btn-primary" href="/overview">To my watch lists</a>
+      {:else}
+        <a class="btn btn-primary" href="/new">Get started</a>
+      {/if}
     </div>
     <div class="w-56 sm:block hidden"></div>
   </div>
