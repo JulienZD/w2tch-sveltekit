@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@prisma/client": "^4.3.1",
     "@sveltejs/adapter-vercel": "^1.0.0-next.76",
     "@sveltejs/kit": "^1.0.0-next.484",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -25,6 +26,7 @@
     "postcss": "^8.4.16",
     "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.7.0",
+    "prisma": "^4.3.1",
     "svelte": "^3.44.0",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.7",

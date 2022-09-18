@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String @id @default(uuid())
+  email       String @unique
+  name        String
+
+  watcher     Watcher @relation(fields: [watcherId], references: [id], onDelete: SetNull)
+  watcherId   String @unique
+}
+
+model Watcher {
+  id                String @id @default(uuid())
+
+  name              String
+  watchGroups       WatchersOnWatchGroups[]
+
+  ownedWatchGroups  WatchGroup[]
+
+  user              User?
+  userId            String?
+}
+
+model WatchGroup {
+  id        String @id @default(uuid())
+
+  owner     Watcher @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   String @unique
+  watchers  WatchersOnWatchGroups[]
+  movies    MoviesOnWatchGroups[]
+
+  createdAt DateTime @default(now()) @ignore
+  updatedAt DateTime @updatedAt @ignore
+}
+
+
+model WatchersOnWatchGroups {
+  watcher       Watcher @relation(fields: [watcherId], references: [id], onDelete: Cascade)
+  watcherId     String
+
+  watchGroup    WatchGroup @relation(fields: [watchGroupId], references: [id], onDelete: Cascade)
+  watchGroupId  String
+
+  joinedAt      DateTime @default(now()) @ignore
+
+  @@id([watcherId, watchGroupId])
+}
+
+model Movie {
+  id          String @id @default(uuid())
+  name        String
+  imdbRating  Decimal
+  imdbUrl     String @unique
+  imageUrl    String
+
+  watchGroups MoviesOnWatchGroups[]
+}
+
+model MoviesOnWatchGroups {
+  movie     Movie @relation(fields: [movieId], references: [id], onDelete: Restrict)
+  movieId   String
+
+  watchGroup  WatchGroup @relation(fields: [watchGroupId], references: [id], onDelete: Cascade)
+  watchGroupId  String
+
+  seenOn  DateTime  @default(now())
+  @@id([movieId, watchGroupId])
+}
