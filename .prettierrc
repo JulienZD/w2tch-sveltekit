@@ -1,11 +1,13 @@
 {
   "endOfLine": "lf",
   "semi": true,
-  "svelteStrictMode": true,
   "tabWidth": 2,
   "singleQuote": true,
   "trailingComma": "es5",
   "printWidth": 120,
   "pluginSearchDirs": ["."],
-  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
+  "plugins": ["prettier-plugin-svelte"],
+  "svelteAllowShorthand": true,
+  "svelteIndentScriptAndStyle": true
 }
