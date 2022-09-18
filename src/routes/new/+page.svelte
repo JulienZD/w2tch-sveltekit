@@ -15,10 +15,11 @@
     if (!response.ok) {
       const { error } = await response.json();
       errors = error.fieldErrors;
+      return;
     }
 
     const { id } = await response.json();
-    goto(`/watchlist/${id}`);
+    goto(`/watchlist/${id}?reload=1`);
   };
 </script>
 

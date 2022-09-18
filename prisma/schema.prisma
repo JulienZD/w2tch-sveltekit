@@ -20,6 +20,16 @@ model User {
 
   ownedWatchGroups  WatchGroup[]
   watchGroups       WatchersOnWatchGroups[]
+
+  account   Account?
+}
+
+model Account {
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  password  String
+
+  @@id([userId])
 }
 
 model WatchGroup {

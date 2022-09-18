@@ -1,18 +1,32 @@
 <script lang="ts">
-  import type { LayoutData } from './$types';
-  import '../app.css';
-  import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
+  import { browser } from '$app/environment';
+  import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
+  import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
+  import '../app.css';
+  import type { LayoutData } from './$types';
 
   export let data: LayoutData;
+
+  $: {
+    // Invalidate all `load` results (mostly done to refresh the auth state)
+    if (browser && $page.url.searchParams.get('reload') === '1') {
+      $page.url.searchParams.delete('reload');
+      invalidateAll().then(() =>
+        goto($page.url.href, {
+          replaceState: true,
+        })
+      );
+    }
+  }
 </script>
 
 {#if !!data.temporaryAccountExpiresOn}
   <div class="container max-w-4xl fixed top-4 left-0 right-0">
-    <TemporaryAccountAlert temporaryAccountExpiresOn="{data.temporaryAccountExpiresOn}" />
+    <TemporaryAccountAlert temporaryAccountExpiresOn={data.temporaryAccountExpiresOn} />
   </div>
 {/if}
 
-<main class="container" class:pt-24="{$page.url.pathname !== '/' && !!data.temporaryAccountExpiresOn}">
+<main class="container" class:pt-24={$page.url.pathname !== '/' && !!data.temporaryAccountExpiresOn}>
   <slot />
 </main>
