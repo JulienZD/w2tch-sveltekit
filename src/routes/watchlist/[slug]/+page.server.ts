@@ -6,7 +6,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   const watchlist = await prisma.watchGroup.findFirst({
     where: {
       id: params.slug,
-      ownerId: locals.user?.id,
+      OR: [
+        {
+          watchers: {
+            some: {
+              watcherId: locals.user?.id,
+            },
+          },
+        },
+        {
+          ownerId: locals.user?.id,
+        },
+      ],
     },
   });
 
