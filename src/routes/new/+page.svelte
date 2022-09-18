@@ -15,6 +15,7 @@
     if (!response.ok) {
       const { error } = await response.json();
       errors = error.fieldErrors;
+      return;
     }
 
     const { id } = await response.json();
