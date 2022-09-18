@@ -11,30 +11,21 @@ datasource db {
 }
 
 model User {
-  id          String @id @default(uuid())
-  email       String @unique
-  name        String
+  id                        String @id @default(uuid())
+  email                     String? @unique
+  name                      String
 
-  watcher     Watcher @relation(fields: [watcherId], references: [id], onDelete: SetNull)
-  watcherId   String @unique
-}
-
-model Watcher {
-  id                String @id @default(uuid())
-
-  name              String
-  watchGroups       WatchersOnWatchGroups[]
+  // NULL indicates that the account doesn't expire and the user has signed up
+  temporaryAccessExpiresOn  DateTime? @default(dbgenerated("NOW() + '30 days'"))
 
   ownedWatchGroups  WatchGroup[]
-
-  user              User?
-  userId            String?
+  watchGroups       WatchersOnWatchGroups[]
 }
 
 model WatchGroup {
   id        String @id @default(uuid())
 
-  owner     Watcher @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner     User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId   String @unique
   watchers  WatchersOnWatchGroups[]
   movies    MoviesOnWatchGroups[]
@@ -45,7 +36,7 @@ model WatchGroup {
 
 
 model WatchersOnWatchGroups {
-  watcher       Watcher @relation(fields: [watcherId], references: [id], onDelete: Cascade)
+  watcher       User @relation(fields: [watcherId], references: [id], onDelete: Cascade)
   watcherId     String
 
   watchGroup    WatchGroup @relation(fields: [watchGroupId], references: [id], onDelete: Cascade)
@@ -74,5 +65,6 @@ model MoviesOnWatchGroups {
   watchGroupId  String
 
   seenOn  DateTime  @default(now())
+
   @@id([movieId, watchGroupId])
 }
