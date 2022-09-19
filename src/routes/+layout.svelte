@@ -27,6 +27,9 @@
   </div>
 {/if}
 
-<main class="container" class:pt-24={$page.url.pathname !== '/' && !!data.temporaryAccountExpiresOn}>
+<main
+  class={`container h-full ${$page.url.pathname !== '/' ? 'max-w-none md:max-w-3xl md:mx-auto' : ''}`}
+  class:pt-24={$page.url.pathname !== '/' && !!data.temporaryAccountExpiresOn}
+>
   <slot />
 </main>

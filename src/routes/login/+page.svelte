@@ -24,7 +24,7 @@
   };
 </script>
 
-<div class="min-h-screen grid place-content-center">
+<div class="h-full grid place-content-center">
   <div class="bg-base-200 p-4 rounded-lg prose">
     <h1 class="text-center font-light">Login</h1>
     {#if error}

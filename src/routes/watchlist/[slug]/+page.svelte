@@ -9,7 +9,7 @@
   let view: 'list' | 'grid' = 'grid';
 </script>
 
-<div class="prose max-w-none">
+<div class="prose">
   <h1>{watchlist.name}</h1>
   <div class="flex text-sm gap-x-4">
     <p>List by <span class="font-semibold">{watchlist.owner.name}</span></p>
@@ -20,5 +20,5 @@
     {view === 'list' ? 'grid' : 'list'} view</button
   >
   <div class="divider" />
-  <Movies movies={watchlist.movies} {view} />
+  <Movies movies={watchlist.movies} view="list" />
 </div>
