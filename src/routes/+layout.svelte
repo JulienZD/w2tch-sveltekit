@@ -22,7 +22,7 @@
 </script>
 
 {#if !!data.temporaryAccountExpiresOn}
-  <div class="container max-w-4xl fixed top-4 left-0 right-0">
+  <div class="container px-2 md:px-0 max-w-4xl fixed bottom-4 left-0 right-0">
     <TemporaryAccountAlert temporaryAccountExpiresOn={data.temporaryAccountExpiresOn} />
   </div>
 {/if}
