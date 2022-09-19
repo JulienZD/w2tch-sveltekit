@@ -20,9 +20,11 @@ export const load = async ({ locals }: Parameters<PageServerLoad>[0]) => {
     },
   });
 
-  const mappedWatchGroups = watchGroups.map((group) => ({
+  const mappedWatchGroups = watchGroups.map(({ _count, ...group }) => ({
     ...group,
     isOwner: group.ownerId === locals.user?.id,
+    memberCount: _count.watchers,
+    movieCount: _count.movies,
   }));
 
   return { watchGroups: mappedWatchGroups };

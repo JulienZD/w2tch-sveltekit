@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import SEO from '$lib/components/SEO.svelte';
-  import pluralize from 'pluralize';
   import { goto } from '$app/navigation';
+  import Pluralize from '$lib/components/Pluralize.svelte';
 
   export let data: PageData;
 </script>
@@ -23,8 +23,8 @@
               <div class="badge badge-ghost">owner</div>
             {/if}
           </h2>
-          <div>{watchGroup._count.watchers} {pluralize('member', watchGroup._count.watchers)}</div>
-          <div>{watchGroup._count.movies} {pluralize('movie', watchGroup._count.movies)}</div>
+          <Pluralize word="member" count={watchGroup.memberCount} />
+          <Pluralize word="movie" count={watchGroup.movieCount} />
         </div>
       </div>
     {/each}
