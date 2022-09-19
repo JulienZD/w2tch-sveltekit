@@ -1,12 +1,19 @@
 <script lang="ts">
+  import { invalidate } from '$app/navigation';
   import Pluralize from '$lib/components/Pluralize.svelte';
   import Movies from '$lib/components/watchlist/movies/Movies.svelte';
+  import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
+  import type { Movie } from '$lib/models';
   import type { PageData } from './$types';
 
   export let data: PageData;
   const { watchlist } = data;
 
-  let view: 'list' | 'grid' = 'grid';
+  const refresh = async (event: CustomEvent<Movie>) => {
+    console.log('refresh', event.detail);
+    // TODO: Do we need to invalidate the current page? (to refresh the movie list)
+    // invalidate('/');
+  };
 </script>
 
 <div class="prose">
@@ -16,9 +23,7 @@
     <p><Pluralize count={watchlist.memberCount} word="member" /></p>
     <p><Pluralize count={watchlist.movieCount} word="movie" /></p>
   </div>
-  <button class="btn btn-sm btn-secondary min-w-[6rem]" on:click={() => (view = view === 'list' ? 'grid' : 'list')}>
-    {view === 'list' ? 'grid' : 'list'} view</button
-  >
+  <AddMovie on:added={refresh} />
   <div class="divider" />
   <Movies movies={watchlist.movies} view="list" />
 </div>
