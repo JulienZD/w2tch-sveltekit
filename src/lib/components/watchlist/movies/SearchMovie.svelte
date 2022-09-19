@@ -1,40 +1,47 @@
 <script lang="ts">
+  import type { MovieSearchResult } from '$lib/models';
   import { createEventDispatcher } from 'svelte';
+  import Select from 'svelte-select';
 
-  const dispatch = createEventDispatcher<{ selected: unknown }>();
+  const dispatch = createEventDispatcher<{ select: MovieSearchResult }>();
 
-  let results: { id: string; title: string }[] = [
-    {
-      id: 'abc',
-      title: 'Interstellar',
-    },
-    {
-      id: 'def',
-      title: 'The Shawshank Redemption',
-    },
-  ];
-  let timer: NodeJS.Timer;
+  let selectedMovie: MovieSearchResult | null = null;
 
-  const debounce = (v: typeof results[number]) => {
-    clearTimeout(timer);
-    timer = setTimeout(async () => {
-      console.log(v);
-      // results = await fetch('/api/movies', {
-      //   method: 'GET',
-      // });
-      dispatch(
-        'selected',
-        results.find((r) => r.name === v)
-      );
-    }, 250);
+  const defaultEmptyMessage = 'Start typing to search';
+  let emptyMessage = defaultEmptyMessage;
+
+  const searchMovies = async (filterText: string) => {
+    emptyMessage = 'No results';
+
+    const response = await fetch(`/api/movie/search?query=${filterText}`);
+    if (!response.ok) {
+      emptyMessage = 'An error occurred';
+      return [];
+    }
+
+    const { movies } = await response.json();
+    if (movies?.length) {
+      emptyMessage = defaultEmptyMessage;
+    }
+    return movies;
+  };
+
+  const handleSelect = (event: CustomEvent<MovieSearchResult>) => {
+    selectedMovie = event.detail;
+    dispatch('select', selectedMovie);
   };
 </script>
 
-<div class="form-control">
-  <label for="movie">Search Movie</label>
-  <select id="movie" on:change={(e) => !!e?.target && debounce(e.target)}>
-    {#each results as result}
-      <option id={result.id}>{result.title}</option>
-    {/each}
-  </select>
+<div class="form-control w-full">
+  <label class="label" for="movie">Movie</label>
+  <Select
+    id="movie"
+    loadOptions={searchMovies}
+    value={selectedMovie}
+    on:select={handleSelect}
+    placeholder="Type to search"
+    noOptionsMessage={emptyMessage}
+    labelIdentifier="title"
+    optionIdentifier="id"
+  />
 </div>
