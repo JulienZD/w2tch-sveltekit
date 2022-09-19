@@ -7,24 +7,18 @@
   const { watchlist } = data;
 
   let view: 'list' | 'grid' = 'grid';
-
-  // watchlist.movies is the join table
-  $: movies = watchlist.movies.map((m) => ({
-    ...m.movie,
-    seenOn: m.seenOn,
-  }));
 </script>
 
 <div class="prose max-w-none">
   <h1>{watchlist.name}</h1>
   <div class="flex text-sm gap-x-4">
     <p>List by <span class="font-semibold">{watchlist.owner.name}</span></p>
-    <p><Pluralize count={watchlist._count.watchers} word="member" /></p>
-    <p><Pluralize count={watchlist._count.movies} word="movie" /></p>
+    <p><Pluralize count={watchlist.memberCount} word="member" /></p>
+    <p><Pluralize count={watchlist.movieCount} word="movie" /></p>
   </div>
   <button class="btn btn-sm btn-secondary min-w-[6rem]" on:click={() => (view = view === 'list' ? 'grid' : 'list')}>
     {view === 'list' ? 'grid' : 'list'} view</button
   >
   <div class="divider" />
-  <Movies {movies} {view} />
+  <Movies movies={watchlist.movies} {view} />
 </div>

@@ -1,4 +1,5 @@
 import { prisma } from '$lib/db/client';
+import type { WatchlistMovie } from '$lib/models';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -51,7 +52,21 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     throw error(404, 'Not Found');
   }
 
-  // @ts-expect-error Prisma uses Decimal.js under the hood, which can't automatically be converted
-  watchlist.movies.forEach(({ movie }) => (movie.imdbRating = movie.imdbRating.toNumber()));
-  return { watchlist };
+  // Prisma's returned data structure isn't very easy to work with to display data,
+  // so we map it into a better structure
+  const { _count, ...watchlistData } = watchlist;
+  const mappedWatchList = {
+    ...watchlistData,
+    memberCount: _count.watchers,
+    movieCount: _count.movies,
+    movies: watchlistData.movies.map(
+      ({ seenOn, movie }): WatchlistMovie => ({
+        ...movie,
+        imdbRating: movie.imdbRating.toNumber(),
+        seenOn,
+      })
+    ),
+  };
+
+  return { watchlist: mappedWatchList };
 };
