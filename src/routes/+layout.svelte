@@ -28,8 +28,9 @@
 {/if}
 
 <main
-  class={`container h-full ${$page.url.pathname !== '/' ? 'max-w-none md:max-w-3xl md:mx-auto' : ''}`}
-  class:pt-24={$page.url.pathname !== '/' && !!data.temporaryAccountExpiresOn}
+  class={`container px-2 md:px-0 h-full ${
+    $page.url.pathname !== '/' ? 'max-w-none md:max-w-3xl md:mx-auto pt-4 md:pt-32' : ''
+  }`}
 >
   <slot />
 </main>
