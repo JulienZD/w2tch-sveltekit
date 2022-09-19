@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SeenBadge from '$lib/components/ui/SeenBadge.svelte';
   import type { WatchlistMovie } from '$lib/models';
   import { StarIcon } from 'svelte-feather-icons';
 
@@ -18,9 +19,7 @@
                 <StarIcon class="fill-current" size="15" />{movie.imdbRating}
               </span>
             </div>
-            <div class="badge min-w-[5rem] select-none" class:badge-success={movie.seenOn}>
-              {movie.seenOn ? 'Seen' : 'Unseen'}
-            </div>
+            <SeenBadge seenOn={movie.seenOn} />
           </div>
         </td>
       </tr>
@@ -35,9 +34,7 @@
           </span>
         </td>
         <td>
-          <div class="badge min-w-[5rem] select-none" class:badge-success={movie.seenOn}>
-            {movie.seenOn ? 'Seen' : 'Unseen'}
-          </div>
+          <SeenBadge seenOn={movie.seenOn} />
         </td>
       </tr>
     {/each}
