@@ -2,8 +2,8 @@ import type { zMovieSearchResult } from '$lib/moviedb/responses';
 import type { Movie as PrismaMovie } from '@prisma/client';
 import type { z } from 'zod';
 
-export interface Movie extends Omit<PrismaMovie, 'imdbRating'> {
-  imdbRating: number;
+export interface Movie extends Omit<PrismaMovie, 'rating' | 'source'> {
+  rating?: number;
 }
 
 export interface WatchlistMovie extends Movie {

@@ -59,13 +59,19 @@ model WatchersOnWatchGroups {
   @@id([watcherId, watchGroupId])
 }
 
+enum ExternalMovieSource {
+  TMDB
+}
+
 model Movie {
   id          String @id @default(uuid())
+  
   name        String
-  imdbRating  Decimal @db.Decimal(10, 2)
-  imdbUrl     String @unique
-  imageUrl    String
+  rating      Decimal? @db.Decimal(10, 2)
+  externalId  String
+  source      ExternalMovieSource
 
+  @@unique([source, externalId])
   watchGroups MoviesOnWatchGroups[]
 }
 

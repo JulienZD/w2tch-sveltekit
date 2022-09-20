@@ -17,9 +17,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             select: {
               name: true,
               id: true,
-              imageUrl: true,
-              imdbUrl: true,
-              imdbRating: true,
+              externalId: true,
+              rating: true,
             },
           },
         },
@@ -62,7 +61,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     movies: watchlistData.movies.map(
       ({ seenOn, movie }): WatchlistMovie => ({
         ...movie,
-        imdbRating: movie.imdbRating.toNumber(),
+        rating: movie.rating?.toNumber(),
         seenOn,
       })
     ),

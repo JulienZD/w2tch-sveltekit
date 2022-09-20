@@ -28,5 +28,5 @@ export type MovieDBSearchResult = z.infer<typeof zMovieDBSearchResult>;
 export const zMovieSearchResult = zMovieDBSearchResult.transform((result) => ({
   id: result.id,
   title: result.title,
-  imagePath: result.poster_path,
+  rating: result.vote_average,
 }));

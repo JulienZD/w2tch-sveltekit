@@ -11,7 +11,9 @@
       <div class="card-body">
         <h2 class="text-center">{movie.name}</h2>
         <span class="text-center">{index + 1}</span>
-        <Rating score={movie.imdbRating} />
+        {#if movie.rating}
+          <Rating score={movie.rating} />
+        {/if}
       </div>
     </div>
   {/each}

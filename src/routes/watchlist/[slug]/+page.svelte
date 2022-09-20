@@ -23,7 +23,7 @@
     <p><Pluralize count={watchlist.memberCount} word="member" /></p>
     <p><Pluralize count={watchlist.movieCount} word="movie" /></p>
   </div>
-  <AddMovie on:added={refresh} />
+  <AddMovie watchlistId={watchlist.id} on:added={refresh} />
   <div class="divider" />
   <Movies movies={watchlist.movies} view="list" />
 </div>
