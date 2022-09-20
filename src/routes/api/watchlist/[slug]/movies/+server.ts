@@ -27,7 +27,7 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
 
   await addMovieToWatchList(watchlistId, result.data);
 
-  return json(null, { status: 201 });
+  return json(undefined, { status: 201 });
 };
 
 const addMovieToWatchList = async (watchlistId: string, movie: WatchListAddMovie) => {
