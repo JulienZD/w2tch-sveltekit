@@ -1,9 +1,7 @@
 import { prisma } from '$lib/db/client';
 import type { WatchlistMovie } from '$lib/models';
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const getWatchList = async (id: string, userId: string) => {
   const watchlist = await prisma.watchGroup.findFirst({
     include: {
       owner: {
@@ -31,24 +29,24 @@ export const load: PageServerLoad = async ({ params, locals }) => {
       },
     },
     where: {
-      id: params.slug,
+      id,
       OR: [
         {
           watchers: {
             some: {
-              watcherId: locals.user?.id,
+              watcherId: userId,
             },
           },
         },
         {
-          ownerId: locals.user?.id,
+          ownerId: userId,
         },
       ],
     },
   });
 
   if (!watchlist) {
-    throw error(404, 'Not Found');
+    return null;
   }
 
   // Prisma's returned data structure isn't very easy to work with to display data,
@@ -67,5 +65,5 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     ),
   };
 
-  return { watchlist: mappedWatchList };
+  return mappedWatchList;
 };

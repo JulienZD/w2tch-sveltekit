@@ -1,18 +1,14 @@
 <script lang="ts">
   import { invalidate } from '$app/navigation';
+  import { page } from '$app/stores';
   import Pluralize from '$lib/components/Pluralize.svelte';
-  import Movies from '$lib/components/watchlist/movies/Movies.svelte';
   import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
-  import type { Movie } from '$lib/models';
-  import type { PageData } from './$types';
+  import Movies from '$lib/components/watchlist/movies/Movies.svelte';
 
-  export let data: PageData;
-  const { watchlist } = data;
+  $: ({ watchlist } = $page.data);
 
-  const refresh = async (event: CustomEvent<Movie>) => {
-    console.log('refresh', event.detail);
-    // TODO: Do we need to invalidate the current page? (to refresh the movie list)
-    // invalidate('/');
+  const refresh = () => {
+    invalidate(`/api/watchlist/${$page.params.slug}`);
   };
 </script>
 

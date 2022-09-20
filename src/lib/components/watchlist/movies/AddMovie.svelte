@@ -1,26 +1,21 @@
 <script lang="ts">
-  import type { Movie, MovieSearchResult } from '$lib/models';
+  import type { MovieSearchResult } from '$lib/models';
   import { createEventDispatcher } from 'svelte';
   import SearchMovie from './SearchMovie.svelte';
 
   export let watchlistId: string;
 
-  const dispatch = createEventDispatcher<{ added: Movie }>();
+  const dispatch = createEventDispatcher<{ added: undefined }>();
 
   let showForm = false;
-  let name = '';
   let selectedMovie: MovieSearchResult | null = null;
 
   const addMovie = async () => {
-    console.log('addMovie', selectedMovie);
     await fetch(`/api/watchlist/${watchlistId}/movies`, {
       method: 'POST',
       body: JSON.stringify(selectedMovie),
     });
-    // dispatch('added', {
-    //   name: selectedMovie,
-    //   id: selectedMovie?.id,
-    // } as Movie);
+    dispatch('added');
   };
 </script>
 
