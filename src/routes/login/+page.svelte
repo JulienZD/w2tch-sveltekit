@@ -38,13 +38,13 @@
           bind:value={email}
           type="email"
           required
-          class="input input-bordered max-w-xs"
+          class="input max-w-xs"
           placeholder="bruce@wayne.com"
         />
       </div>
       <div class="form-control">
         <label for="password" class="label">Password</label>
-        <input id="password" bind:value={password} type="password" required class="input input-bordered max-w-xs" />
+        <input id="password" bind:value={password} type="password" required class="input max-w-xs" />
       </div>
 
       <button class="btn btn-primary mt-4">Login</button>

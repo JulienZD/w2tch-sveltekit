@@ -2,3 +2,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .input {
+    @apply input-bordered bg-transparent border-current;
+  }
+
+  /* Since the background is transparent, the placeholder isn't always easily readable */
+  .input::placeholder {
+    color: theme(colors.base-content / 65%);
+  }
+}

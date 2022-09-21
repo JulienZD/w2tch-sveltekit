@@ -3,10 +3,16 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
+  import { onMount } from 'svelte';
+  import { themeChange } from 'theme-change';
   import '../app.css';
   import type { LayoutData } from './$types';
 
   export let data: LayoutData;
+
+  onMount(() => {
+    themeChange();
+  });
 
   $: {
     // Invalidate all `load` results (mostly done to refresh the auth state)
@@ -34,3 +40,13 @@
 >
   <slot />
 </main>
+
+<style lang="postcss">
+  :global(html[data-theme='winter']) {
+    @apply bg-gradient-to-tr from-transparent to-blue-300;
+  }
+
+  :global(html[data-theme='night']) {
+    @apply bg-gradient-to-tr from-transparent to-blue-900;
+  }
+</style>

@@ -35,7 +35,7 @@
         bind:value={name}
         required
         class:border-error={errors.name}
-        class="input input-bordered max-w-xs"
+        class="input max-w-xs"
         placeholder="Favorites"
       />
       {#if errors.name}
