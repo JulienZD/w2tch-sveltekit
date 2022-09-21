@@ -25,7 +25,7 @@
 </script>
 
 <div class="h-full grid place-content-center">
-  <div class="p-4 drop-shadow-2xl backdrop-saturate-150 text-neutral rounded-lg prose">
+  <div class="p-10 shadow-md rounded-3xl bg-base-200 prose">
     <h1 class="text-center font-light">Login</h1>
     {#if error}
       <p class="my-0 text-error text-sm">Invalid credentials</p>
@@ -47,7 +47,7 @@
         <input id="password" bind:value={password} type="password" required class="input max-w-xs" />
       </div>
 
-      <button class="btn btn-primary mt-4">Login</button>
+      <button class="btn btn-primary mt-6 md:mt-4 w-full md:w-auto md:min-w-[6rem]">Login</button>
     </form>
   </div>
 </div>
