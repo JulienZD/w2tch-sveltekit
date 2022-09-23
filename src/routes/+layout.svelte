@@ -25,10 +25,11 @@
       );
     }
   }
+  $: showTemporaryAccountBanner = !['/', '/signup', 'login'].includes($page.url.pathname);
 </script>
 
-{#if !!data.temporaryAccountExpiresOn}
-  <div class="container px-2 md:px-0 max-w-4xl fixed bottom-4 left-0 right-0">
+{#if showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn}
+  <div class="container px-2 md:px-0 max-w-4xl fixed bottom-4 left-0 right-0 z-50">
     <TemporaryAccountAlert temporaryAccountExpiresOn={data.temporaryAccountExpiresOn} />
   </div>
 {/if}
