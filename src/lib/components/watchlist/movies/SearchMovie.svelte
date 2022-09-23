@@ -2,12 +2,20 @@
   import type { MovieSearchResult } from '$lib/models';
   import { createEventDispatcher } from 'svelte';
   import Select from 'svelte-select';
+  import type { Writable } from 'svelte/store';
 
-  export let hideResults: string[] = [];
+  export let resultsStore: Writable<unknown[]>;
+  export let excludeResults: string[] = [];
 
   const dispatch = createEventDispatcher<{ select: MovieSearchResult }>();
 
   let selectedMovie: MovieSearchResult | null = null;
+
+  resultsStore.subscribe((items) => {
+    if (!items.length) {
+      selectedMovie = null;
+    }
+  });
 
   const defaultEmptyMessage = 'Start typing to search';
   let emptyMessage = defaultEmptyMessage;
@@ -26,7 +34,10 @@
       emptyMessage = defaultEmptyMessage;
     }
 
-    return movies.filter((m: { title: string }) => !hideResults.includes(m.title));
+    const filteredResults = movies.filter((m: { title: string }) => !excludeResults.includes(m.title));
+    resultsStore.set(filteredResults);
+
+    return $resultsStore;
   };
 
   const handleSelect = (event: CustomEvent<MovieSearchResult>) => {
@@ -40,8 +51,10 @@
   <Select
     id="movie"
     loadOptions={searchMovies}
+    items={$resultsStore}
     value={selectedMovie}
     on:select={handleSelect}
+    on:clear={() => resultsStore.set([])}
     placeholder="Type to search"
     noOptionsMessage={emptyMessage}
     labelIdentifier="title"
