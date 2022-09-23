@@ -24,8 +24,8 @@
   };
 </script>
 
-<div class="min-h-screen grid place-content-center">
-  <div class="bg-base-200 p-4 rounded-lg prose">
+<div class="h-full grid place-content-center">
+  <div class="p-10 shadow-md rounded-3xl bg-base-200 prose">
     <h1 class="text-center font-light">Login</h1>
     {#if error}
       <p class="my-0 text-error text-sm">Invalid credentials</p>
@@ -38,16 +38,16 @@
           bind:value={email}
           type="email"
           required
-          class="input input-bordered max-w-xs"
+          class="input max-w-xs"
           placeholder="bruce@wayne.com"
         />
       </div>
       <div class="form-control">
         <label for="password" class="label">Password</label>
-        <input id="password" bind:value={password} type="password" required class="input input-bordered max-w-xs" />
+        <input id="password" bind:value={password} type="password" required class="input max-w-xs" />
       </div>
 
-      <button class="btn btn-primary mt-4">Login</button>
+      <button class="btn btn-primary mt-6 md:mt-4 w-full md:w-auto md:min-w-[6rem]">Login</button>
     </form>
   </div>
 </div>

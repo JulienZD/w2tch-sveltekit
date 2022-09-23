@@ -1,0 +1,42 @@
+<script lang="ts">
+  import Rating from '$lib/components/ui/Rating.svelte';
+  import SeenBadge from '$lib/components/ui/SeenBadge.svelte';
+  import type { WatchlistMovie } from '$lib/models';
+
+  export let movies: WatchlistMovie[];
+</script>
+
+<table class="table">
+  {#each movies as movie, index (movie.id)}
+    <tr class="table-row md:hidden hover cursor-pointer">
+      <td>{index + 1}</td>
+      <td class="w-full">
+        <div class="w-full inline-flex justify-between items-center gap-x-4">
+          <div class="inline-flex flex-col">
+            <span class="whitespace-pre-wrap">{movie.name}</span>
+            {#if movie.rating}
+              <Rating score={movie.rating} />
+            {/if}
+          </div>
+          <SeenBadge seenOn={movie.seenOn} />
+        </div>
+      </td>
+    </tr>
+    <tr class="hidden md:table-row hover cursor-pointer">
+      <td>{index + 1}</td>
+      <td>
+        {movie.name}
+      </td>
+      <td>
+        {#if movie.rating}
+          <Rating score={movie.rating} />
+        {/if}
+      </td>
+      <td>
+        <div class="w-full h-full inline-flex justify-end items-center">
+          <SeenBadge seenOn={movie.seenOn} />
+        </div>
+      </td>
+    </tr>
+  {/each}
+</table>

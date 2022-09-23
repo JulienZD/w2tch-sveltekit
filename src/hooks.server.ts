@@ -1,5 +1,5 @@
 import { USER_ID_COOKIE } from '$lib/constants';
-import { prisma } from '$lib/db/client';
+import { prisma } from '$lib/server/db';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {

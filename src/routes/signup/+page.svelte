@@ -43,7 +43,7 @@
         bind:value={name}
         required
         class:border-error={errors.name}
-        class="input input-bordered max-w-xs"
+        class="input max-w-xs"
         placeholder={data?.user?.name ?? 'Marty McFly'}
       />
       {#if errors.name}
@@ -58,7 +58,7 @@
         type="email"
         required
         class:border-error={errors.email}
-        class="input input-bordered max-w-xs"
+        class="input max-w-xs"
         placeholder="bruce@wayne.com"
       />
       {#if errors.email}
@@ -73,7 +73,7 @@
         type="password"
         required
         class:border-error={errors.password}
-        class="input input-bordered max-w-xs"
+        class="input max-w-xs"
       />
       {#if errors.password}
         <p class="my-0 text-error text-sm">{errors.password}</p>

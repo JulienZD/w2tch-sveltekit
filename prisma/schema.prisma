@@ -59,13 +59,19 @@ model WatchersOnWatchGroups {
   @@id([watcherId, watchGroupId])
 }
 
+enum ExternalMovieSource {
+  TMDB
+}
+
 model Movie {
   id          String @id @default(uuid())
+  
   name        String
-  imdbRating  Decimal
-  imdbUrl     String @unique
-  imageUrl    String
+  rating      Decimal? @db.Decimal(10, 2)
+  externalId  String
+  source      ExternalMovieSource
 
+  @@unique([source, externalId])
   watchGroups MoviesOnWatchGroups[]
 }
 
@@ -76,7 +82,7 @@ model MoviesOnWatchGroups {
   watchGroup  WatchGroup @relation(fields: [watchGroupId], references: [id], onDelete: Cascade)
   watchGroupId  String
 
-  seenOn  DateTime  @default(now())
+  seenOn  DateTime?
 
   @@id([movieId, watchGroupId])
 }

@@ -25,7 +25,7 @@
 
 <SEO title="Create a new watchlist" />
 
-<div class="container prose">
+<div class="prose">
   <h1>Create a new watchlist</h1>
   <form on:submit|preventDefault={createWatchList}>
     <div class="form-control">
@@ -35,7 +35,7 @@
         bind:value={name}
         required
         class:border-error={errors.name}
-        class="input input-bordered max-w-xs"
+        class="input max-w-xs"
         placeholder="Favorites"
       />
       {#if errors.name}
