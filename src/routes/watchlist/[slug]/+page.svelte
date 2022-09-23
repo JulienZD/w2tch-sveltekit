@@ -4,8 +4,9 @@
   import Pluralize from '$lib/components/Pluralize.svelte';
   import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
   import Movies from '$lib/components/watchlist/movies/Movies.svelte';
+  import type { PageData } from './$types';
 
-  $: ({ watchlist } = $page.data);
+  $: ({ watchlist } = $page.data as PageData);
 
   const refresh = () => {
     invalidate(`/api/watchlist/${$page.params.slug}`);
