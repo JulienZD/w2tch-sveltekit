@@ -45,7 +45,11 @@
       <Theme />
     </header>
   {/if}
-  <main class={`${isHomePage ? '' : 'pt-4 md:pt-32'}`}>
+  <main
+    class={`${isHomePage ? '' : 'pt-4 md:pt-32'} ${
+      showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
+    }`}
+  >
     <slot />
   </main>
 </div>
