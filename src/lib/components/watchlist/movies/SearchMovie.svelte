@@ -3,6 +3,8 @@
   import { createEventDispatcher } from 'svelte';
   import Select from 'svelte-select';
 
+  export let hideResults: string[] = [];
+
   const dispatch = createEventDispatcher<{ select: MovieSearchResult }>();
 
   let selectedMovie: MovieSearchResult | null = null;
@@ -23,7 +25,8 @@
     if (movies?.length) {
       emptyMessage = defaultEmptyMessage;
     }
-    return movies;
+
+    return movies.filter((m: { title: string }) => !hideResults.includes(m.title));
   };
 
   const handleSelect = (event: CustomEvent<MovieSearchResult>) => {

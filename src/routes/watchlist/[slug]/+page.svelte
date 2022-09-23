@@ -20,7 +20,7 @@
     <p><Pluralize count={watchlist.memberCount} word="member" /></p>
     <p><Pluralize count={watchlist.movieCount} word="movie" /></p>
   </div>
-  <AddMovie watchlistId={watchlist.id} on:added={refresh} />
+  <AddMovie watchlist={{ id: watchlist.id, movies: watchlist.movies.map((m) => m.name) }} on:added={refresh} />
   <div class="divider" />
   <Movies movies={watchlist.movies} view="list" />
 </div>
