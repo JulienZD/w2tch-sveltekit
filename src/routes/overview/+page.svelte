@@ -9,7 +9,7 @@
 
 <SEO />
 
-<div class="prose p-16 max-w-none">
+<div class="prose">
   <h1>Your watchlists</h1>
   <p>These are all the watch groups you own or are a member of.</p>
   <a class="btn btn-primary btn-sm mb-4" href="/new">Create new</a>

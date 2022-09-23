@@ -13,7 +13,7 @@
   };
 </script>
 
-<div class="prose">
+<div class="prose max-w-full">
   <h1>{watchlist.name}</h1>
   <div class="flex text-sm gap-x-4">
     <p>List by <span class="font-semibold">{watchlist.owner.name}</span></p>
