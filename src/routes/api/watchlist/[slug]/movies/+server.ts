@@ -1,5 +1,5 @@
-import { prisma } from '$lib/db/client';
-import { zWatchListAddMovie, type WatchListAddMovie } from '$lib/models/watchlist';
+import { zWatchListAddMovie } from '$lib/models/watchlist';
+import { addMovieToWatchlist } from '$lib/server/db/watchlist';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 // Adds a movie to a Watchlist. Stores the movie in the database if it isn't yet known
@@ -25,37 +25,7 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
     );
   }
 
-  await addMovieToWatchList(watchlistId, result.data);
+  await addMovieToWatchlist(watchlistId, result.data);
 
   return json(undefined, { status: 201 });
-};
-
-const addMovieToWatchList = async (watchlistId: string, movie: WatchListAddMovie) => {
-  await prisma.watchGroup.update({
-    where: {
-      id: watchlistId,
-    },
-    data: {
-      movies: {
-        create: {
-          movie: {
-            connectOrCreate: {
-              where: {
-                source_externalId: {
-                  externalId: movie.id,
-                  source: 'TMDB',
-                },
-              },
-              create: {
-                name: movie.title,
-                rating: movie.rating,
-                externalId: movie.id,
-                source: 'TMDB',
-              },
-            },
-          },
-        },
-      },
-    },
-  });
 };

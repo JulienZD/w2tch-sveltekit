@@ -1,5 +1,5 @@
 import { USER_ID_COOKIE } from '$lib/constants';
-import { prisma } from '$lib/db/client';
+import { prisma } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
 import { generateSlug } from 'random-word-slugs';
 
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
   });
 
   cookies.set(USER_ID_COOKIE, user.id, {
-    expires: user.temporaryAccessExpiresOn,
+    expires: user.temporaryAccessExpiresOn as Date,
     path: '/',
   });
 };

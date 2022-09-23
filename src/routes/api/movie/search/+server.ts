@@ -1,4 +1,4 @@
-import { movieDBClient } from '$lib/moviedb/api';
+import { movieDBClient } from '$lib/server/providers/moviedb/api';
 import { error as kitError, json, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url, locals }) => {

@@ -1,4 +1,4 @@
-import type { zMovieSearchResult } from '$lib/moviedb/responses';
+import type { zMovieSearchResult } from '$lib/server/providers/moviedb/responses';
 import type { Movie as PrismaMovie } from '@prisma/client';
 import type { z } from 'zod';
 

@@ -1,4 +1,4 @@
-import { prisma } from '$lib/db/client';
+import { prisma } from '$lib/server/db';
 import type { User } from '@prisma/client';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';

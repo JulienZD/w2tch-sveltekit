@@ -1,4 +1,4 @@
-import { prisma } from '$lib/db/client';
+import { prisma } from '$lib/server/db';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';

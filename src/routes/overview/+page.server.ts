@@ -1,31 +1,11 @@
-import { prisma } from '$lib/db/client';
+import { getWatchlistsForUser } from '$lib/server/db/watchlist';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = async ({ locals }: Parameters<PageServerLoad>[0]) => {
-  const watchGroups = await prisma.watchGroup.findMany({
-    where: {
-      watchers: {
-        some: {
-          watcherId: locals.user?.id,
-        },
-      },
-    },
-    include: {
-      _count: {
-        select: {
-          watchers: true,
-          movies: true,
-        },
-      },
-    },
-  });
+  if (!locals.user?.id) throw error(401);
 
-  const mappedWatchGroups = watchGroups.map(({ _count, ...group }) => ({
-    ...group,
-    isOwner: group.ownerId === locals.user?.id,
-    memberCount: _count.watchers,
-    movieCount: _count.movies,
-  }));
+  const watchGroups = await getWatchlistsForUser(locals.user.id);
 
-  return { watchGroups: mappedWatchGroups };
+  return { watchGroups };
 };

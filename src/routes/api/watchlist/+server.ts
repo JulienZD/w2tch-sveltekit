@@ -1,4 +1,4 @@
-import { prisma } from '$lib/db/client';
+import { prisma } from '$lib/server/db';
 import { zWatchListCreate } from '$lib/models/watchlist';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
