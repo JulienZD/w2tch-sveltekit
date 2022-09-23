@@ -4,8 +4,12 @@
 
   let name: string = '';
   let errors: Record<string, string> = {};
+  let submitting = false;
 
   const createWatchList = async () => {
+    if (submitting) return;
+
+    submitting = true;
     const response = await fetch('/api/watchlist', {
       method: 'POST',
       body: JSON.stringify({
@@ -15,6 +19,7 @@
     if (!response.ok) {
       const { error } = await response.json();
       errors = error.fieldErrors;
+      submitting = false;
       return;
     }
 
@@ -43,6 +48,6 @@
       {/if}
     </div>
 
-    <button class="btn btn-primary mt-2">Create</button>
+    <button class="btn btn-primary mt-2" class:loading={submitting}>Create</button>
   </form>
 </div>
