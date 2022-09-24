@@ -1,4 +1,4 @@
-import { USER_ID_COOKIE } from '$lib/constants';
+import { ACCESS_TOKEN } from '$lib/constants';
 import { prisma } from '$lib/server/db';
 import { createJWT } from '$lib/server/util/createJWT';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   const jwt = createJWT(user);
 
-  cookies.set(USER_ID_COOKIE, jwt, {
+  cookies.set(ACCESS_TOKEN, jwt, {
     expires: oneMonthFromNow,
     path: '/',
   });

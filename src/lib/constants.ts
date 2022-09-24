@@ -1,1 +1,1 @@
-export const USER_ID_COOKIE = 'user-id';
+export const ACCESS_TOKEN = 'access-token';

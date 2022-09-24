@@ -1,4 +1,4 @@
-import { USER_ID_COOKIE } from '$lib/constants';
+import { ACCESS_TOKEN } from '$lib/constants';
 import { prisma } from '$lib/server/db';
 import { createJWT } from '$lib/server/util/createJWT';
 import { generateSlug } from 'random-word-slugs';
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   const jwt = createJWT(user);
 
-  cookies.set(USER_ID_COOKIE, jwt, {
+  cookies.set(ACCESS_TOKEN, jwt, {
     expires: user.temporaryAccessExpiresOn as Date,
     path: '/',
   });
