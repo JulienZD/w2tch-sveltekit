@@ -6,26 +6,36 @@
 
   export let watchlist: { id: string; movies: string[] };
 
-  const resultsCache = writable([]);
+  const movieSearchStore = writable<{ results: MovieSearchResult[]; selection?: MovieSearchResult }>({
+    results: [],
+    selection: undefined,
+  });
 
   const dispatch = createEventDispatcher<{ added: undefined }>();
 
   let showForm = false;
-  let selectedMovie: MovieSearchResult | null = null;
-
   let isSaving = false;
+
   const addMovie = async () => {
-    if (!selectedMovie || isSaving) return;
+    if (!$movieSearchStore.selection || isSaving) return;
 
     isSaving = true;
-    await fetch(`/api/watchlist/${watchlist.id}/movies`, {
+    const response = await fetch(`/api/watchlist/${watchlist.id}/movies`, {
       method: 'POST',
-      body: JSON.stringify(selectedMovie),
+      body: JSON.stringify($movieSearchStore.selection),
     });
-    dispatch('added');
-    selectedMovie = null;
-    resultsCache.set([]);
     isSaving = false;
+    if (!response.ok) {
+      return;
+    }
+
+    dispatch('added');
+
+    // Remove the selected item from the results so they can be reused
+    movieSearchStore.update((current) => ({
+      ...current,
+      results: current.results.filter((r) => r.id !== current.selection?.id),
+    }));
   };
 </script>
 
@@ -36,13 +46,7 @@
 {#if showForm}
   <form on:submit|preventDefault={addMovie}>
     <div class="flex items-end gap-x-2">
-      <SearchMovie
-        autoFocusOnMount
-        resultsStore={resultsCache}
-        initialValue={selectedMovie}
-        on:select={(e) => (selectedMovie = e.detail)}
-        excludeResults={watchlist.movies}
-      />
+      <SearchMovie autoFocusOnMount {movieSearchStore} excludeResults={watchlist.movies} />
 
       <button class="btn btn-primary btn-square btn-sm" class:loading={isSaving}>
         {isSaving ? '' : '+'}
