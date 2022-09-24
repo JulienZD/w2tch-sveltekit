@@ -1,11 +1,23 @@
 <script lang="ts">
   import type { MovieSearchResult } from '$lib/models';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import Select from 'svelte-select';
   import type { Writable } from 'svelte/store';
 
   export let resultsStore: Writable<unknown[]>;
   export let excludeResults: string[] = [];
+  export let autoFocusOnMount = false;
+  export let initialValue: MovieSearchResult | null;
+
+  let isFocused = false;
+
+  onMount(() => {
+    if (autoFocusOnMount) {
+      setTimeout(() => {
+        isFocused = true;
+      }, 1);
+    }
+  });
 
   const dispatch = createEventDispatcher<{ select: MovieSearchResult }>();
 
@@ -49,10 +61,11 @@
 <div class="form-control w-full themed">
   <label class="label" for="movie">Movie</label>
   <Select
+    bind:isFocused
     id="movie"
     loadOptions={searchMovies}
     items={$resultsStore}
-    value={selectedMovie}
+    value={selectedMovie ?? initialValue}
     on:select={handleSelect}
     on:clear={() => resultsStore.set([])}
     placeholder="Type to search"
