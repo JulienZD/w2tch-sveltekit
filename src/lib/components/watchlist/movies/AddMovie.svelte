@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { MovieSearchResult } from '$lib/models';
-  import { createItemsCache } from '$lib/stores/itemsCache';
   import { createEventDispatcher } from 'svelte';
+  import { writable } from 'svelte/store';
   import SearchMovie from './SearchMovie.svelte';
 
   export let watchlist: { id: string; movies: string[] };
 
-  const resultsCache = createItemsCache();
+  const resultsCache = writable([]);
 
   const dispatch = createEventDispatcher<{ added: undefined }>();
 
