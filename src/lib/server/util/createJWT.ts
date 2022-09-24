@@ -1,6 +1,8 @@
 import { JWT_SECRET, JWT_EXPIRY } from '$env/static/private';
 import type { User } from '@prisma/client';
-import { sign as jwtSign } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+
+const { sign: jwtSign } = jsonwebtoken;
 
 export const createJWT = (user: User) => {
   return jwtSign(
