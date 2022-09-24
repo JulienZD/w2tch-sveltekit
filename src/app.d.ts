@@ -10,3 +10,9 @@ declare namespace App {
   // interface PageError {}
   // interface Platform {}
 }
+
+declare namespace svelte.JSX {
+  interface HTMLAttributes<T> {
+    onclickoutside: () => void;
+  }
+}
