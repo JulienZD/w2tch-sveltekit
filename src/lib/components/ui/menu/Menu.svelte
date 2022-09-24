@@ -42,11 +42,11 @@
 </script>
 
 <div class="relative not-prose">
-  <button class="btn-ghost rounded transition-colors" on:click={openOrClose}>
+  <button class="btn btn-sm btn-ghost rounded-box transition-colors" on:click={openOrClose}>
     {#if variant === 'horizontal'}
-      <MoreHorizontalIcon />
+      <MoreHorizontalIcon size="20" />
     {:else}
-      <MoreVerticalIcon />
+      <MoreVerticalIcon size="20" />
     {/if}
   </button>
 
@@ -56,9 +56,15 @@
       on:clickoutside={close}
       bind:this={menuRef}
       transition:fly={{ duration: 200, easing: quadInOut }}
-      class="menu md:menu-normal bg-base-100 min-w-[10rem] rounded-box absolute top-4 right-2 z-50 whitespace-nowrap"
+      class="menu md:menu-normal bg-base-100 shadow-md min-w-[10rem] rounded-box absolute top-6 right-4 z-50 whitespace-nowrap"
     >
       <slot />
     </ul>
   {/if}
 </div>
+
+<style lang="postcss">
+  :global(.menu li:only-child, .menu li:only-child > *) {
+    border-radius: inherit !important;
+  }
+</style>
