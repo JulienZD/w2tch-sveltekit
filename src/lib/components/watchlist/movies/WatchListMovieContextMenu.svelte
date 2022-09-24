@@ -14,21 +14,26 @@
   const handleUpdateMarkMovieSeenStatus = async () => {
     console.log('update', movie.id, 'to seen:', !!!movie.seenOn);
   };
+
+  const markAsSeenUnseenText = `Mark as ${movie.seenOn ? 'Unseen' : 'Seen'}`;
+  const markAsSeenUnseenA11yText = `Mark ${movie.name} as ${movie.seenOn ? 'unseen' : 'seen'}`;
 </script>
 
 {#if variant === 'inline'}
   <div class="flex items-center gap-x-4 float-right">
-    <button
-      class="btn btn-ghost btn-sm rounded-box"
-      aria-label={`Mark ${movie.name} as ${movie.seenOn ? 'unseen' : 'seen'}`}
-      on:click={handleUpdateMarkMovieSeenStatus}
-    >
-      {#if movie.seenOn}
-        <EyeOffIcon size="20" />
-      {:else}
-        <EyeIcon size="20" />
-      {/if}
-    </button>
+    <div class="tooltip" data-tip={markAsSeenUnseenText}>
+      <button
+        class="btn btn-ghost btn-sm rounded-box"
+        aria-label={markAsSeenUnseenA11yText}
+        on:click={handleUpdateMarkMovieSeenStatus}
+      >
+        {#if movie.seenOn}
+          <EyeOffIcon size="20" />
+        {:else}
+          <EyeIcon size="20" />
+        {/if}
+      </button>
+    </div>
 
     <Menu variant="vertical">
       <MenuItem label="Delete" on:click={handleDeleteMovie}>
@@ -38,7 +43,7 @@
   </div>
 {:else}
   <Menu {variant}>
-    <MenuItem label={`Mark as ${movie.seenOn ? 'Unseen' : 'Seen'}`}>
+    <MenuItem label={markAsSeenUnseenText}>
       <svelte:fragment slot="icon">
         {#if movie.seenOn}
           <EyeOffIcon class="h-4 w-4" />
