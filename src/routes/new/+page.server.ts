@@ -1,7 +1,8 @@
 import { USER_ID_COOKIE } from '$lib/constants';
 import { prisma } from '$lib/server/db';
-import type { PageServerLoad } from './$types';
+import { createJWT } from '$lib/server/util/createJWT';
 import { generateSlug } from 'random-word-slugs';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   if (locals.user) {
@@ -20,7 +21,9 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     },
   });
 
-  cookies.set(USER_ID_COOKIE, user.id, {
+  const jwt = createJWT(user);
+
+  cookies.set(USER_ID_COOKIE, jwt, {
     expires: user.temporaryAccessExpiresOn as Date,
     path: '/',
   });

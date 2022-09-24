@@ -1,8 +1,9 @@
-import { prisma } from '$lib/server/db';
-import { error, json, type RequestHandler } from '@sveltejs/kit';
-import { z } from 'zod';
-import bcrypt from 'bcryptjs';
 import { USER_ID_COOKIE } from '$lib/constants';
+import { prisma } from '$lib/server/db';
+import { createJWT } from '$lib/server/util/createJWT';
+import { error, json, type RequestHandler } from '@sveltejs/kit';
+import bcrypt from 'bcryptjs';
+import { z } from 'zod';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
   const body = await request.json();
@@ -47,7 +48,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
   const oneMonthFromNow = new Date();
   oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
 
-  cookies.set(USER_ID_COOKIE, user.id, {
+  const jwt = createJWT(user);
+
+  cookies.set(USER_ID_COOKIE, jwt, {
     expires: oneMonthFromNow,
     path: '/',
   });
