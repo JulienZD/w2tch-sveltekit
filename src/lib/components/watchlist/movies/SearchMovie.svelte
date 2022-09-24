@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { MovieSearchResult } from '$lib/models';
-  import { createEventDispatcher } from 'svelte';
+  import { onMount } from 'svelte';
   import Select from 'svelte-select';
   import type { Writable } from 'svelte/store';
 
-  export let resultsStore: Writable<unknown[]>;
+  export let movieSearchStore: Writable<{ results: MovieSearchResult[]; selection?: MovieSearchResult }>;
   export let excludeResults: string[] = [];
+  export let autoFocusOnMount = false;
 
-  const dispatch = createEventDispatcher<{ select: MovieSearchResult }>();
-
-  let selectedMovie: MovieSearchResult | null = null;
-
-  resultsStore.subscribe((items) => {
-    if (!items.length) {
-      selectedMovie = null;
+  let isFocused = false;
+  onMount(() => {
+    if (autoFocusOnMount) {
+      setTimeout(() => {
+        isFocused = true;
+      }, 1);
     }
   });
 
@@ -35,26 +35,36 @@
     }
 
     const filteredResults = movies.filter((m: { title: string }) => !excludeResults.includes(m.title));
-    resultsStore.set(filteredResults);
+    movieSearchStore.update((current) => ({
+      ...current,
+      results: filteredResults,
+    }));
 
-    return $resultsStore;
+    return $movieSearchStore.results;
   };
 
   const handleSelect = (event: CustomEvent<MovieSearchResult>) => {
-    selectedMovie = event.detail;
-    dispatch('select', selectedMovie);
+    movieSearchStore.update((current) => ({
+      ...current,
+      selection: event.detail,
+    }));
   };
 </script>
 
 <div class="form-control w-full themed">
   <label class="label" for="movie">Movie</label>
   <Select
+    bind:isFocused
     id="movie"
     loadOptions={searchMovies}
-    items={$resultsStore}
-    value={selectedMovie}
+    items={$movieSearchStore.results}
+    value={$movieSearchStore.selection}
     on:select={handleSelect}
-    on:clear={() => resultsStore.set([])}
+    on:clear={() =>
+      movieSearchStore.set({
+        selection: undefined,
+        results: [],
+      })}
     placeholder="Type to search"
     noOptionsMessage={emptyMessage}
     labelIdentifier="title"
