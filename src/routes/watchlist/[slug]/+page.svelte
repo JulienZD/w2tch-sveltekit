@@ -11,9 +11,13 @@
   onMount(() => {
     watchlistStore.set(($page.data as PageData).watchlist);
   });
+
+  let randomizerMode = false;
+  let showAddMovieForm = false;
+
+  $: unseenMovies = $watchlistStore.movies?.filter((m) => !m.seenOn);
 </script>
 
-<!-- <Randomizer items={watchlist.movies.map((m) => m.name)} /> -->
 <div class="prose max-w-full">
   <h1>{$watchlistStore.name}</h1>
   <div class="flex text-sm gap-x-4">
@@ -21,10 +25,36 @@
     <p><Pluralize count={$watchlistStore.memberCount} word="member" /></p>
     <p><Pluralize count={$watchlistStore.movieCount} word="movie" /></p>
   </div>
-  <AddMovie
-    addMovieCb={(movie) => watchlistStore.addMovie(movie)}
-    watchlist={{ id: $watchlistStore.id, movies: $watchlistStore.movies?.map((m) => m.name) }}
-  />
+  <div class:flex={!showAddMovieForm} class={!randomizerMode ? 'justify-between' : 'justify-end'}>
+    {#if !randomizerMode}
+      <button class="btn btn-primary btn-sm" on:click={() => (showAddMovieForm = !showAddMovieForm)}>
+        {showAddMovieForm ? 'Hide search' : 'Add movie'}
+      </button>
+      <AddMovie
+        addMovieCb={(movie) => watchlistStore.addMovie(movie)}
+        watchlist={{
+          id: $watchlistStore.id,
+          movies: $watchlistStore.movies?.map((m) => m.name),
+        }}
+        showForm={showAddMovieForm}
+      />
+    {/if}
+    {#if !showAddMovieForm}
+      <button
+        class="btn btn-sm btn-secondary"
+        on:click={() => (randomizerMode = !randomizerMode)}
+        disabled={!unseenMovies?.length}
+        title={!unseenMovies?.length ? 'There are no unseen movies!' : ''}
+        >{!randomizerMode ? 'Pick a random movie' : 'Back'}</button
+      >
+    {/if}
+  </div>
+
   <div class="divider" />
-  <Movies movies={$watchlistStore.movies} view="list" />
+
+  {#if randomizerMode}
+    <Randomizer items={unseenMovies?.map((m) => m.name)} />
+  {:else}
+    <Movies movies={$watchlistStore.movies} view="list" />
+  {/if}
 </div>

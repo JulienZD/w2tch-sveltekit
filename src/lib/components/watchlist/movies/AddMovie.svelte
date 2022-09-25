@@ -5,6 +5,7 @@
   import SearchMovie from './SearchMovie.svelte';
 
   export let watchlist: { id: string; movies: string[] };
+  export let showForm = false;
   export let addMovieCb: (movie: MovieSearchResult) => Promise<ApiResult<WatchlistMovie>>;
 
   const movieSearchStore = writable<{ results: MovieSearchResult[]; selection?: MovieSearchResult }>({
@@ -12,7 +13,6 @@
     selection: undefined,
   });
 
-  let showForm = false;
   let isSaving = false;
 
   const addMovie = async () => {
@@ -32,10 +32,6 @@
     isSaving = false;
   };
 </script>
-
-<button class="btn btn-primary btn-sm" on:click={() => (showForm = !showForm)}>
-  {showForm ? 'Hide search' : 'Add movie'}
-</button>
 
 {#if showForm}
   <form on:submit|preventDefault={addMovie}>
