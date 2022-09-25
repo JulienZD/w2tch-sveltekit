@@ -1,5 +1,5 @@
 import type { WatchListPatchMovie } from '$lib/models/watchlist';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 import { prisma } from '..';
 import { handlePrismaClientError } from '../errors';
 import { enhanceWatchlistMovie } from './enhanceWatchlistMovie';
@@ -12,7 +12,7 @@ export const patchWatchlistMovie = async (
   try {
     return await _patchWatchlistMovie(watchlistId, movieId, data);
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw handlePrismaClientError(error);
     }
     throw error;
