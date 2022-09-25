@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Pluralize from '$lib/components/Pluralize.svelte';
+  import Randomizer from '$lib/components/Randomizer.svelte';
   import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
   import Movies from '$lib/components/watchlist/movies/Movies.svelte';
   import { watchlistStore } from '$lib/stores/watchlistStore';
@@ -12,6 +13,7 @@
   });
 </script>
 
+<!-- <Randomizer items={watchlist.movies.map((m) => m.name)} /> -->
 <div class="prose max-w-full">
   <h1>{$watchlistStore.name}</h1>
   <div class="flex text-sm gap-x-4">
