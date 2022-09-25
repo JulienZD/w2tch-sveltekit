@@ -1,5 +1,5 @@
 import type { Watchlist, WatchlistMovie } from '$lib/models';
-import type { WatchListAddMovie } from '$lib/models/watchlist';
+import type { WatchListAddMovie, WatchListPatchMovie } from '$lib/models/watchlist';
 import { api } from '$lib/util/api';
 import { writable } from 'svelte/store';
 
@@ -44,6 +44,27 @@ const createWatchlistStore = () => {
     return result;
   };
 
+  const updateMovie = async (movieId: string, data: Partial<WatchListPatchMovie['input']>) => {
+    if (!watchlistId) throw new Error('Missing watchlistId, was the store initialized?');
+
+    const result = await api.patch<WatchlistMovie>(`/api/watchlist/${watchlistId}/movies/${movieId}`, data);
+    if (!result.success) {
+      return result;
+    }
+
+    update(({ movies, ...current }) => {
+      const movieIndex = movies.findIndex((m) => m.id === result.data.id);
+      movies[movieIndex] = result.data;
+
+      return {
+        ...current,
+        movies,
+      };
+    });
+
+    return result;
+  };
+
   return {
     set: (watchlist: Watchlist) => {
       watchlistId = watchlist.id;
@@ -52,6 +73,7 @@ const createWatchlistStore = () => {
     subscribe,
     addMovie,
     removeMovie,
+    updateMovie,
   };
 };
 

@@ -17,6 +17,11 @@
   };
 
   const handleUpdateMarkMovieSeenStatus = async () => {
+    const result = await watchlistStore.updateMovie(movie.id, { seenOn: !movie.seenOn });
+    if (!result.success) {
+      // TODO: Show error
+      console.error(result.error);
+    }
     console.log('update', movie.id, 'to seen:', !!!movie.seenOn);
   };
 
@@ -48,7 +53,7 @@
   </div>
 {:else}
   <Menu {variant}>
-    <MenuItem label={markAsSeenUnseenText}>
+    <MenuItem label={markAsSeenUnseenText} on:click={handleUpdateMarkMovieSeenStatus}>
       <svelte:fragment slot="icon">
         {#if movie.seenOn}
           <EyeOffIcon class="h-4 w-4" />

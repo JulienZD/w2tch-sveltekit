@@ -11,3 +11,12 @@ export const zWatchListAddMovie = z.object({
 });
 
 export type WatchListAddMovie = z.infer<typeof zWatchListAddMovie>;
+
+export const zWatchListPatchMovie = z.object({
+  seenOn: z.boolean().transform((seen) => (seen ? new Date() : null)),
+});
+
+export type WatchListPatchMovie = {
+  input: z.input<typeof zWatchListPatchMovie>;
+  output: z.output<typeof zWatchListPatchMovie>;
+};
