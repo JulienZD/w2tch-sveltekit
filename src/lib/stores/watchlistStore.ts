@@ -24,6 +24,26 @@ const createWatchlistStore = () => {
     return result;
   };
 
+  const removeMovie = async (movieId: string) => {
+    if (!watchlistId) throw new Error('Missing watchlistId, was the store initialized?');
+
+    const result = await api.delete<WatchlistMovie>(`/api/watchlist/${watchlistId}/movies/${movieId}`);
+    if (!result.success) {
+      return result;
+    }
+
+    update(({ movies, ...current }) => {
+      const newMovies = movies.filter((m) => m.id !== result.data.id);
+      return {
+        ...current,
+        movies: newMovies,
+        movieCount: newMovies.length,
+      };
+    });
+
+    return result;
+  };
+
   return {
     set: (watchlist: Watchlist) => {
       watchlistId = watchlist.id;
@@ -31,6 +51,7 @@ const createWatchlistStore = () => {
     },
     subscribe,
     addMovie,
+    removeMovie,
   };
 };
 

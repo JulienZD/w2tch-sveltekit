@@ -1,8 +1,8 @@
-import type { WatchlistMovie } from '$lib/models';
 import type { WatchListAddMovie } from '$lib/models/watchlist';
 import { prisma } from '$lib/server/db';
 import { Prisma } from '@prisma/client';
 import { handlePrismaClientError } from '../errors';
+import { enhanceWatchlistMovie } from './enhanceWatchlistMovie';
 
 export const addMovieToWatchlist = async (watchlistId: string, movie: WatchListAddMovie) => {
   try {
@@ -57,13 +57,7 @@ const _addMovieToWatchList = async (watchlistId: string, movie: WatchListAddMovi
     },
   });
 
-  const [movieResult] = result.movies.map(
-    ({ seenOn, movie }): WatchlistMovie => ({
-      ...movie,
-      rating: movie.rating?.toNumber(),
-      seenOn,
-    })
-  );
+  const [movieResult] = result.movies.map(enhanceWatchlistMovie);
 
   return movieResult;
 };

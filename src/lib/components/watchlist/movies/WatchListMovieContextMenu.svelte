@@ -2,13 +2,18 @@
   import Menu from '$lib/components/ui/menu/Menu.svelte';
   import MenuItem from '$lib/components/ui/menu/MenuItem.svelte';
   import type { WatchlistMovie } from '$lib/models';
+  import { watchlistStore } from '$lib/stores/watchlistStore';
   import { EyeIcon, EyeOffIcon, Trash2Icon } from 'svelte-feather-icons';
 
   export let movie: WatchlistMovie;
   export let variant: 'horizontal' | 'vertical' | 'inline' = 'vertical';
 
   const handleDeleteMovie = async () => {
-    console.log('delete', movie.id);
+    const result = await watchlistStore.removeMovie(movie.id);
+    if (!result.success) {
+      // TODO: Show error
+      console.error(result.error);
+    }
   };
 
   const handleUpdateMarkMovieSeenStatus = async () => {
