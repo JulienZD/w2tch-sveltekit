@@ -7,7 +7,7 @@ export const zWatchListCreate = z.object({
 export const zWatchListAddMovie = z.object({
   id: z.string().or(z.number()).transform(String),
   title: z.string().min(1),
-  rating: z.number().min(0).max(10).nullish(),
+  rating: z.number().min(0).max(10).nullable(),
 });
 
 export type WatchListAddMovie = z.infer<typeof zWatchListAddMovie>;

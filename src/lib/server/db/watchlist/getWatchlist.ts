@@ -1,7 +1,7 @@
 import { prisma } from '$lib/server/db';
-import type { WatchlistMovie } from '$lib/models';
+import type { Watchlist, WatchlistMovie } from '$lib/models';
 
-export const getWatchlist = async (id: string, userId: string) => {
+export const getWatchlist = async (id: string, userId: string): Promise<Watchlist | null> => {
   const watchlist = await prisma.watchGroup.findFirst({
     include: {
       owner: {

@@ -18,7 +18,7 @@ const zMovieDBSearchResult = z.object({
   popularity: z.number(),
   vote_count: z.number(),
   video: z.boolean(),
-  vote_average: z.number(),
+  vote_average: z.number().nullable(),
   adult: z.boolean(),
   poster_path: z.string().startsWith('/').nullable(),
   backdrop_path: z.string().nullable(),
@@ -26,7 +26,7 @@ const zMovieDBSearchResult = z.object({
 export type MovieDBSearchResult = z.infer<typeof zMovieDBSearchResult>;
 
 export const zMovieSearchResult = zMovieDBSearchResult.transform((result) => ({
-  id: result.id,
+  id: String(result.id),
   title: result.title,
   rating: result.vote_average,
 }));

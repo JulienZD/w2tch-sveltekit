@@ -1,26 +1,28 @@
 <script lang="ts">
-  import { invalidate } from '$app/navigation';
   import { page } from '$app/stores';
   import Pluralize from '$lib/components/Pluralize.svelte';
   import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
   import Movies from '$lib/components/watchlist/movies/Movies.svelte';
+  import { watchlistStore } from '$lib/stores/watchlistStore';
+  import { onMount } from 'svelte';
   import type { PageData } from './$types';
 
-  $: ({ watchlist } = $page.data as PageData);
-
-  const refresh = () => {
-    invalidate(`/api/watchlist/${$page.params.slug}`);
-  };
+  onMount(() => {
+    watchlistStore.set(($page.data as PageData).watchlist);
+  });
 </script>
 
 <div class="prose max-w-full">
-  <h1>{watchlist.name}</h1>
+  <h1>{$watchlistStore.name}</h1>
   <div class="flex text-sm gap-x-4">
-    <p>List by <span class="font-semibold">{watchlist.owner.name}</span></p>
-    <p><Pluralize count={watchlist.memberCount} word="member" /></p>
-    <p><Pluralize count={watchlist.movieCount} word="movie" /></p>
+    <p>List by <span class="font-semibold">{$watchlistStore.owner?.name}</span></p>
+    <p><Pluralize count={$watchlistStore.memberCount} word="member" /></p>
+    <p><Pluralize count={$watchlistStore.movieCount} word="movie" /></p>
   </div>
-  <AddMovie watchlist={{ id: watchlist.id, movies: watchlist.movies.map((m) => m.name) }} on:added={refresh} />
+  <AddMovie
+    addMovieCb={(movie) => watchlistStore.addMovie(movie)}
+    watchlist={{ id: $watchlistStore.id, movies: $watchlistStore.movies?.map((m) => m.name) }}
+  />
   <div class="divider" />
-  <Movies movies={watchlist.movies} view="list" />
+  <Movies movies={$watchlistStore.movies} view="list" />
 </div>
