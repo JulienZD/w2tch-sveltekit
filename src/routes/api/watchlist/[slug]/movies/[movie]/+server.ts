@@ -1,8 +1,7 @@
 import { zWatchListPatchMovie } from '$lib/models/watchlist';
 import { DatabaseError, PrismaError } from '$lib/server/db/errors';
 import { getWatchlist } from '$lib/server/db/watchlist';
-import { patchWatchlistMovie } from '$lib/server/db/watchlist/patchWatchlistMovie';
-import { removeMovieFromWatchlist } from '$lib/server/db/watchlist/removeMovieFromWatchlist';
+import { patchWatchlistMovie, removeMovieFromWatchlist } from '$lib/server/db/watchlist';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 export const DELETE: RequestHandler = async ({ locals, params }) => {
