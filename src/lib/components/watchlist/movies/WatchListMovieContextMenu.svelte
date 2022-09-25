@@ -25,8 +25,8 @@
     console.log('update', movie.id, 'to seen:', !!!movie.seenOn);
   };
 
-  const markAsSeenUnseenText = `Mark as ${movie.seenOn ? 'Unseen' : 'Seen'}`;
-  const markAsSeenUnseenA11yText = `Mark ${movie.name} as ${movie.seenOn ? 'unseen' : 'seen'}`;
+  $: markAsSeenUnseenText = `Mark as ${movie.seenOn ? 'Unseen' : 'Seen'}`;
+  $: markAsSeenUnseenA11yText = `Mark ${movie.name} as ${movie.seenOn ? 'unseen' : 'seen'}`;
 </script>
 
 {#if variant === 'inline'}
