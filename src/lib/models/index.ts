@@ -11,3 +11,15 @@ export interface WatchlistMovie extends Movie {
 }
 
 export type MovieSearchResult = z.infer<typeof zMovieSearchResult>;
+
+export interface Watchlist {
+  id: string;
+  name: string;
+  movies: WatchlistMovie[];
+  ownerId: string;
+  owner: {
+    name: string;
+  };
+  memberCount: number;
+  movieCount: number;
+}

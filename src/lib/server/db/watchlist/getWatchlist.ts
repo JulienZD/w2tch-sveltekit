@@ -1,7 +1,8 @@
 import { prisma } from '$lib/server/db';
-import type { WatchlistMovie } from '$lib/models';
+import type { Watchlist } from '$lib/models';
+import { enhanceWatchlistMovie } from './enhanceWatchlistMovie';
 
-export const getWatchlist = async (id: string, userId: string) => {
+export const getWatchlist = async (id: string, userId: string): Promise<Watchlist | null> => {
   const watchlist = await prisma.watchGroup.findFirst({
     include: {
       owner: {
@@ -17,6 +18,7 @@ export const getWatchlist = async (id: string, userId: string) => {
               id: true,
               externalId: true,
               rating: true,
+              source: true,
             },
           },
         },
@@ -56,13 +58,7 @@ export const getWatchlist = async (id: string, userId: string) => {
     ...watchlistData,
     memberCount: _count.watchers,
     movieCount: _count.movies,
-    movies: watchlistData.movies.map(
-      ({ seenOn, movie }): WatchlistMovie => ({
-        ...movie,
-        rating: movie.rating?.toNumber(),
-        seenOn,
-      })
-    ),
+    movies: watchlistData.movies.map(enhanceWatchlistMovie),
   };
 
   return mappedWatchList;

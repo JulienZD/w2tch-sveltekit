@@ -1,17 +1,16 @@
 <script lang="ts">
-  import type { MovieSearchResult } from '$lib/models';
-  import { createEventDispatcher } from 'svelte';
+  import type { MovieSearchResult, WatchlistMovie } from '$lib/models';
+  import type { ApiResult } from '$lib/util/api';
   import { writable } from 'svelte/store';
   import SearchMovie from './SearchMovie.svelte';
 
   export let watchlist: { id: string; movies: string[] };
+  export let addMovieCb: (movie: MovieSearchResult) => Promise<ApiResult<WatchlistMovie>>;
 
   const movieSearchStore = writable<{ results: MovieSearchResult[]; selection?: MovieSearchResult }>({
     results: [],
     selection: undefined,
   });
-
-  const dispatch = createEventDispatcher<{ added: undefined }>();
 
   let showForm = false;
   let isSaving = false;
@@ -20,22 +19,17 @@
     if (!$movieSearchStore.selection || isSaving) return;
 
     isSaving = true;
-    const response = await fetch(`/api/watchlist/${watchlist.id}/movies`, {
-      method: 'POST',
-      body: JSON.stringify($movieSearchStore.selection),
-    });
-    isSaving = false;
-    if (!response.ok) {
-      return;
+
+    const result = await addMovieCb($movieSearchStore.selection);
+
+    if (result.success) {
+      // Remove the selected item from the results so they can be reused
+      movieSearchStore.update((current) => ({
+        ...current,
+        results: current.results.filter((r) => r.id !== current.selection?.id),
+      }));
     }
-
-    dispatch('added');
-
-    // Remove the selected item from the results so they can be reused
-    movieSearchStore.update((current) => ({
-      ...current,
-      results: current.results.filter((r) => r.id !== current.selection?.id),
-    }));
+    isSaving = false;
   };
 </script>
 

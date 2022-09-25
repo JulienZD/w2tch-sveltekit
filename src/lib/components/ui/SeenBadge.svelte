@@ -1,10 +1,10 @@
 <script lang="ts">
-  export let seenOn: Date | null;
+  export let seenOn: string | null;
 </script>
 
 <div
   class={`badge min-w-[5rem] select-none ${seenOn ? 'badge-success' : 'badge-ghost'}`}
-  title={seenOn?.toDateString()}
+  title={seenOn ? new Date(seenOn).toDateString() : ''}
 >
   {seenOn ? 'Seen' : 'Unseen'}
 </div>
