@@ -1,10 +1,11 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { goto, invalidateAll } from '$app/navigation';
+  import { beforeNavigate, goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
   import Theme from '$lib/components/ui/Theme.svelte';
   import { onMount } from 'svelte';
+  import { fly } from 'svelte/transition';
   import { themeChange } from 'theme-change';
   import '../app.css';
   import type { LayoutData } from './$types';
@@ -31,6 +32,15 @@
       themeChange(false);
     }
   });
+
+  let transitionDelta = -1;
+  beforeNavigate((nav) => {
+    if (nav.type === 'popstate') {
+      transitionDelta = -Number(nav.delta) ?? -1;
+    } else {
+      transitionDelta = -1;
+    }
+  });
 </script>
 
 {#if showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn}
@@ -45,13 +55,17 @@
       <Theme />
     </header>
   {/if}
-  <main
-    class={`${isHomePage ? '' : 'pt-4 md:pt-32'} ${
-      showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
-    }`}
-  >
-    <slot />
-  </main>
+  {#key $page.url.pathname}
+    <!-- TODO: Don't transition for reduced motion -->
+    <main
+      in:fly={{ x: 50 * transitionDelta, duration: 400 }}
+      class={`${isHomePage ? '' : 'pt-4 md:pt-32'} ${
+        showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
+      }`}
+    >
+      <slot />
+    </main>
+  {/key}
 </div>
 
 <style lang="postcss">
