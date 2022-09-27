@@ -9,7 +9,7 @@
   const timeUntilTemporaryAccountExpires = humanizeDuration(timeDiff, {
     round: true,
     units: ['w', 'd', 'h', 'm'],
-    largest: 2,
+    largest: 1,
     conjunction: ' and ',
   });
 

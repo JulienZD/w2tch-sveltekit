@@ -7,7 +7,7 @@ export interface Movie extends Omit<PrismaMovie, 'rating' | 'source'> {
 }
 
 export interface WatchlistMovie extends Movie {
-  seenOn: Date | null;
+  seenOn: string | null;
 }
 
 export type MovieSearchResult = z.infer<typeof zMovieSearchResult>;
