@@ -9,7 +9,7 @@
 
 <table class="table">
   {#each movies as movie, index (movie.id)}
-    <tr class="table-row md:hidden hover cursor-pointer">
+    <tr class="table-row md:hidden hover:bg-base-100/50">
       <td>{index + 1}</td>
       <td class="w-full">
         <div class="w-full inline-flex justify-between items-center gap-x-4">
@@ -26,7 +26,7 @@
         <WatchListMovieContextMenu variant="vertical" {movie} />
       </td>
     </tr>
-    <tr class="hidden md:table-row hover cursor-pointer">
+    <tr class="hidden md:table-row hover:bg-base-100/50">
       <td>{index + 1}</td>
       <td>
         {movie.name}
