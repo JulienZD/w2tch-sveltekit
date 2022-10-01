@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { reducedMotion } from '$lib/stores/reducedMotion';
   import { getCircularly, shuffle } from '$lib/util/array';
   import { easeOutCirc } from '$lib/util/easing';
   import { range } from '$lib/util/range';
@@ -46,14 +47,14 @@
 
     // Iterate at a fixed speed
     for (let i = 0; i < iterations; i++) {
-      await wait(baseDelay);
+      !$reducedMotion && (await wait(baseDelay));
       currentlySelectedIndex++;
     }
 
     // Gradually slow down during the final few iterations
     for (let i = 0; i < easedIterationsCount; i++) {
       const eased = easeOutCirc(i, 0, 1, easedIterationsCount);
-      await wait(baseDelay + eased * easedMultiplier);
+      !$reducedMotion && (await wait(baseDelay + eased * easedMultiplier));
       currentlySelectedIndex++;
     }
 
@@ -88,7 +89,11 @@
     <ul class="min-h-[14rem]">
       {#each shownItems as item (item.value)}
         {@const isSelectedItem = item.selected}
-        <li transition:slide|local={{ duration: 350 }} class:font-bold={isSelectedItem} class:text-lg={isSelectedItem}>
+        <li
+          transition:slide|local={{ duration: $reducedMotion ? 0 : 350 }}
+          class:font-bold={isSelectedItem}
+          class:text-lg={isSelectedItem}
+        >
           <span class="transition-all">
             {item.value}
           </span>
