@@ -1,7 +1,7 @@
 import { Prisma, type WatchlistInvite } from '@prisma/client';
-import { generateSlug } from 'random-word-slugs';
 import { prisma } from '..';
 import { handlePrismaClientError } from '../errors';
+import { randomUUID } from 'node:crypto';
 
 interface InviteCodeOptions {
   remainingUses: number;
@@ -13,9 +13,9 @@ const defaultOptions: InviteCodeOptions = {
   validForNDays: 7,
 };
 
-export const getOrCreateInviteCode = async (watchlistId: string) => {
+export const getOrCreateInviteCode = async (watchlistId: string, options?: InviteCodeOptions) => {
   try {
-    return await _getOrCreateInviteCode(watchlistId);
+    return await _getOrCreateInviteCode(watchlistId, options);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw handlePrismaClientError(error);
@@ -24,7 +24,7 @@ export const getOrCreateInviteCode = async (watchlistId: string) => {
   }
 };
 
-const _getOrCreateInviteCode = async (watchlistId: string, opts: InviteCodeOptions = defaultOptions) => {
+const _getOrCreateInviteCode = async (watchlistId: string, options: InviteCodeOptions = defaultOptions) => {
   const existingInvite = await prisma.watchlistInvite.findUnique({
     where: {
       watchlistId,
@@ -37,15 +37,11 @@ const _getOrCreateInviteCode = async (watchlistId: string, opts: InviteCodeOptio
 
   const { validForNDays, remainingUses } = {
     ...defaultOptions,
-    ...opts,
+    ...options,
   };
 
-  // FIXME: Ensure a unique code is generated
-  const inviteCode = generateSlug(5);
-
-  const now = new Date();
-  const validUntil = new Date(now);
-  validUntil.setDate(now.getDate() + validForNDays);
+  const inviteCode = await getUniqueInviteCode();
+  const validUntil = getNowPlusNDays(validForNDays);
 
   await prisma.watchlistInvite.upsert({
     where: {
@@ -72,4 +68,30 @@ const isInviteValid = (invite: WatchlistInvite): boolean => {
     (invite.remainingUses === -1 || invite.remainingUses > 0) &&
     (!invite.validUntil || invite.validUntil.getTime() >= Date.now())
   );
+};
+
+const getUniqueInviteCode = async (): Promise<string> => {
+  const inviteCode = randomUUID();
+
+  const existingInviteForCode = await prisma.watchlistInvite.findFirst({
+    where: {
+      inviteCode,
+    },
+  });
+
+  if (existingInviteForCode) {
+    console.log('[getUniqueInviteCode]: Invite code already exists', existingInviteForCode);
+    return getUniqueInviteCode();
+  }
+
+  return inviteCode;
+};
+
+const getNowPlusNDays = (days: number) => {
+  const now = new Date();
+
+  const validUntil = new Date(now);
+  validUntil.setDate(now.getDate() + days);
+
+  return validUntil;
 };
