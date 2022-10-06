@@ -42,6 +42,8 @@ model WatchGroup {
   watchers  WatchersOnWatchGroups[]
   movies    MoviesOnWatchGroups[]
 
+  openInvites WatchlistInvite[]
+
   createdAt DateTime? @default(now()) @ignore
   updatedAt DateTime? @default(now()) @updatedAt @ignore
 }
@@ -85,4 +87,13 @@ model MoviesOnWatchGroups {
   seenOn  DateTime?
 
   @@id([movieId, watchGroupId])
+}
+
+model WatchlistInvite {
+  watchlist WatchGroup @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+  watchlistId String @unique
+
+  inviteCode String
+  validUntil DateTime?
+  remainingUses Int @default(-1)
 }
