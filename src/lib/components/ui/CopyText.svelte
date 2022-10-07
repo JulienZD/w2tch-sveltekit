@@ -1,21 +1,25 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { selectContent } from '$lib/actions/selectTextContent';
-  import { ClipboardIcon } from 'svelte-feather-icons';
   import { fade } from 'svelte/transition';
 
   export let text: string | undefined;
 
   let copied = false;
+  let timeout: NodeJS.Timeout;
 
   $: showClipboard = text && browser && 'clipboard' in navigator;
 
   const copyTextToClipboard = async () => {
     if (!text || !browser || !('clipboard' in navigator)) return;
 
+    clearTimeout(timeout);
     try {
       await navigator.clipboard.writeText(text);
       copied = true;
+      timeout = setTimeout(() => {
+        copied = false;
+      }, 1250);
     } catch {
       // No clipboard permission
     }
@@ -29,15 +33,12 @@
     {/if}
   </span>
   {#if showClipboard}
-    <!-- Tooltips have weird overflow behavior, always show it on the left side to prevent it hiding behind other elements -->
-    <span data-tip={copied ? 'Copied!' : 'Copy'} class="tooltip tooltip-left cursor-pointer sticky right-0 bg-base-300">
-      <button
-        on:click={copyTextToClipboard}
-        on:mouseleave={() => setTimeout(() => (copied = false), 150)}
-        class="btn btn-ghost hover:bg-inherit pl-1 py-2 pr-2"
-      >
-        <ClipboardIcon size="20" />
-      </button>
-    </span>
+    <button
+      on:click={copyTextToClipboard}
+      class="sticky right-0 btn ml-1 text-xs pl-2 py-2 pr-2 rounded-tl-none rounded-bl-none min-w-[4.25rem]"
+      class:btn-success={copied}
+    >
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
   {/if}
 </div>
