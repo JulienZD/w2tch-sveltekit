@@ -2,8 +2,8 @@
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
+  import Header from '$lib/components/ui/Header.svelte';
   import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
-  import Theme from '$lib/components/ui/Theme.svelte';
   import { onMount } from 'svelte';
   import { themeChange } from 'theme-change';
   import '../app.css';
@@ -40,10 +40,8 @@
 {/if}
 
 <div class={`container px-2 md:px-0 h-full relative ${isHomePage ? '' : 'max-w-none md:max-w-3xl md:mx-auto'}`}>
-  {#if data.user && !isHomePage}
-    <header class="absolute right-4 top-4 md:top-32">
-      <Theme />
-    </header>
+  {#if data.user}
+    <Header />
   {/if}
   <main
     class={`${isHomePage ? '' : 'h-full pt-4 md:pt-32'} ${
