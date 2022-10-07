@@ -46,7 +46,7 @@
     </header>
   {/if}
   <main
-    class={`${isHomePage ? '' : 'pt-4 md:pt-32'} ${
+    class={`${isHomePage ? '' : 'h-full pt-4 md:pt-32'} ${
       showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
     }`}
   >
