@@ -89,10 +89,12 @@
     </div>
   {/if}
 
-  <button
-    class="mt-2 btn btn-primary btn-sm rounded btn-block sm:w-auto"
-    class:disabled
-    {disabled}
-    class:loading={isSubmitting}>Submit</button
-  >
+  <div class="flex sm:justify-end">
+    <button
+      class="mt-2 btn btn-primary btn-sm rounded btn-block sm:w-auto"
+      class:disabled
+      {disabled}
+      class:loading={isSubmitting}>Submit</button
+    >
+  </div>
 </form>
