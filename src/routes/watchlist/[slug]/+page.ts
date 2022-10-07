@@ -8,5 +8,5 @@ export const load: PageLoad = async ({ fetch, params }) => {
   if (!response.ok) throw error(response.status, response.statusText);
 
   // There's no inferred type for the result of the call to the relative API route, so we have to cast it ourselves
-  return response.json() as Promise<{ watchlist: Watchlist }>;
+  return response.json() as Promise<{ watchlist: Watchlist & { isOwner: boolean } }>;
 };

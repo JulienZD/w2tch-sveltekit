@@ -37,7 +37,9 @@
     <p>List by <span class="font-semibold">{$watchlistStore.owner?.name}</span></p>
     <div class="flex items-center">
       <p><Pluralize count={$watchlistStore.memberCount} word="member" /></p>
-      <button on:click={openInviteModal} class="btn btn-ghost btn-sm"><PlusIcon /></button>
+      {#if $page.data?.isOwner}
+        <button on:click={openInviteModal} class="btn btn-ghost btn-sm"><PlusIcon /></button>
+      {/if}
     </div>
     <p><Pluralize count={$watchlistStore.movieCount} word="movie" /></p>
   </div>
