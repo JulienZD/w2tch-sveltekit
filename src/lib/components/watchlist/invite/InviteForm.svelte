@@ -58,7 +58,7 @@
 
   <div class="form-control my-2">
     <label class="label-text" for="expiresAfter">Expires after</label>
-    <select class="select select-bordered" bind:value={expiresAfter} id="expiresAfter" name="expiresAfter">
+    <select {disabled} class="select select-bordered" bind:value={expiresAfter} id="expiresAfter" name="expiresAfter">
       {#each expiryOptions as expiryOption (expiryOption.hours)}
         <option selected={expiryOption.hours === expiresAfter} value={expiryOption.hours}>
           {expiryOption.label}
