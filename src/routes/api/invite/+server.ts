@@ -2,18 +2,39 @@ import { DatabaseError, PrismaError } from '$lib/server/db/errors';
 import { getWatchlist } from '$lib/server/db/watchlist';
 import { getOrCreateInviteCode } from '$lib/server/db/watchlist/invite';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
+import { z } from 'zod';
 
 /**
  * Creates, re-uses, or re-generates an invite for a watchlist
  *
  * The requesting user has to be the owner of the watchlist, else a 403 is returned
  */
-export const POST: RequestHandler = async ({ locals, params, url }) => {
+export const POST: RequestHandler = async ({ request, locals, url }) => {
   const userId = locals.user?.id;
   if (!userId) throw error(401, 'Unauthorized');
 
-  const watchlistId = params.slug;
-  if (!watchlistId) throw error(404, "Watchlist wasn't found");
+  const body = await request.json();
+
+  const result = z
+    .object({
+      watchlistId: z.string(),
+      expiresInNDays: z.number().positive(),
+      maxUsages: z.literal(-1).or(z.number().positive()),
+    })
+    .safeParse(body);
+
+  if (!result.success) {
+    return json(
+      {
+        error: result.error.flatten(),
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const { watchlistId, ...data } = result.data;
 
   const watchlist = await getWatchlist(watchlistId, userId);
   if (!watchlist) {
@@ -24,7 +45,7 @@ export const POST: RequestHandler = async ({ locals, params, url }) => {
   }
 
   try {
-    const inviteCode = await getOrCreateInviteCode(watchlistId);
+    const inviteCode = await getOrCreateInviteCode(watchlistId, data);
 
     return json({ inviteLink: `${url.origin}/invite/${inviteCode}` });
   } catch (error) {

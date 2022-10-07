@@ -2,10 +2,13 @@
   import { page } from '$app/stores';
   import Pluralize from '$lib/components/Pluralize.svelte';
   import Randomizer from '$lib/components/Randomizer.svelte';
+  import InviteFormModal from '$lib/components/watchlist/invite/InviteFormModal.svelte';
   import AddMovie from '$lib/components/watchlist/movies/AddMovie.svelte';
   import Movies from '$lib/components/watchlist/movies/Movies.svelte';
+  import { appModal } from '$lib/stores/modal';
   import { watchlistStore } from '$lib/stores/watchlistStore';
   import { onMount } from 'svelte';
+  import { PlusIcon } from 'svelte-feather-icons';
   import type { PageData } from './$types';
 
   onMount(() => {
@@ -15,6 +18,16 @@
   let randomizerMode = false;
   let showAddMovieForm = false;
 
+  const openInviteModal = async () => {
+    appModal.push({
+      component: InviteFormModal,
+      props: {
+        buttons: false,
+        title: 'Create watchlist invite',
+      },
+    });
+  };
+
   $: unseenMovies = $watchlistStore.movies?.filter((m) => !m.seenOn);
 </script>
 
@@ -22,7 +35,10 @@
   <h1>{$watchlistStore.name}</h1>
   <div class="flex text-sm gap-x-4">
     <p>List by <span class="font-semibold">{$watchlistStore.owner?.name}</span></p>
-    <p><Pluralize count={$watchlistStore.memberCount} word="member" /></p>
+    <div class="flex items-center">
+      <p><Pluralize count={$watchlistStore.memberCount} word="member" /></p>
+      <button on:click={openInviteModal} class="btn btn-ghost btn-sm"><PlusIcon /></button>
+    </div>
     <p><Pluralize count={$watchlistStore.movieCount} word="movie" /></p>
   </div>
   <div class:flex={!showAddMovieForm} class={!randomizerMode ? 'justify-between' : 'justify-end'}>

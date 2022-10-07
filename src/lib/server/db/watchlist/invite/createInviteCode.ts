@@ -5,13 +5,13 @@ import { randomUUID } from 'node:crypto';
 import { isInviteValid } from '$lib/server/util/isInviteValid';
 
 interface InviteCodeOptions {
-  remainingUses: number;
-  validForNDays: number;
+  maxUsages: number;
+  expiresInNDays: number;
 }
 
 const defaultOptions: InviteCodeOptions = {
-  remainingUses: -1,
-  validForNDays: 7,
+  maxUsages: -1,
+  expiresInNDays: 7,
 };
 
 export const getOrCreateInviteCode = async (watchlistId: string, options?: InviteCodeOptions) => {
@@ -36,13 +36,13 @@ const _getOrCreateInviteCode = async (watchlistId: string, options: InviteCodeOp
     return existingInvite.inviteCode;
   }
 
-  const { validForNDays, remainingUses } = {
+  const { expiresInNDays, maxUsages: remainingUses } = {
     ...defaultOptions,
     ...options,
   };
 
   const inviteCode = await getUniqueInviteCode();
-  const validUntil = getNowPlusNDays(validForNDays);
+  const validUntil = getNowPlusNDays(expiresInNDays);
 
   await prisma.watchlistInvite.upsert({
     where: {
