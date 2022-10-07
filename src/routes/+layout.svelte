@@ -4,6 +4,8 @@
   import { page } from '$app/stores';
   import Header from '$lib/components/ui/Header.svelte';
   import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
+  import { appModal } from '$lib/stores/modal';
+  import ModalPortal from '@svelte-put/modal/ModalPortal.svelte';
   import { onMount } from 'svelte';
   import { themeChange } from 'theme-change';
   import '../app.css';
@@ -51,6 +53,8 @@
     <slot />
   </main>
 </div>
+
+<ModalPortal store={appModal} />
 
 <style lang="postcss">
   :global(html[data-theme='winter']) {
