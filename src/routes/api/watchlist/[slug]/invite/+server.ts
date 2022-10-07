@@ -1,6 +1,6 @@
 import { DatabaseError, PrismaError } from '$lib/server/db/errors';
 import { getWatchlist } from '$lib/server/db/watchlist';
-import { getOrCreateInviteCode } from '$lib/server/db/watchlist/inviteCode';
+import { getOrCreateInviteCode } from '$lib/server/db/watchlist/invite';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 
 /**

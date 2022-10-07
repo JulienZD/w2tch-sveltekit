@@ -1,7 +1,8 @@
-import { Prisma, type WatchlistInvite } from '@prisma/client';
-import { prisma } from '..';
-import { handlePrismaClientError } from '../errors';
+import { Prisma } from '@prisma/client';
+import { prisma } from '$lib/server/db';
+import { handlePrismaClientError } from '$lib/server/db/errors';
 import { randomUUID } from 'node:crypto';
+import { isInviteValid } from '$lib/server/util/isInviteValid';
 
 interface InviteCodeOptions {
   remainingUses: number;
@@ -61,13 +62,6 @@ const _getOrCreateInviteCode = async (watchlistId: string, options: InviteCodeOp
   });
 
   return inviteCode;
-};
-
-const isInviteValid = (invite: WatchlistInvite): boolean => {
-  return (
-    (invite.remainingUses === -1 || invite.remainingUses > 0) &&
-    (!invite.validUntil || invite.validUntil.getTime() >= Date.now())
-  );
 };
 
 const getUniqueInviteCode = async (): Promise<string> => {
