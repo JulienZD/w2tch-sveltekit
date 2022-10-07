@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { expiryOptions } from '$lib/models/invite';
   import { reducedMotion } from '$lib/stores/reducedMotion';
   import { watchlistStore } from '$lib/stores/watchlistStore';
   import { createEventDispatcher } from 'svelte';
@@ -10,7 +11,7 @@
 
   $: transition = $reducedMotion ? fade : slide;
 
-  let expiresInNDays = 7;
+  let expiresAfter = expiryOptions[0].hours;
   let maxUsages = 5;
   let hasUnlimitedUses = true;
 
@@ -24,7 +25,7 @@
     const response = await fetch(`/api/invite`, {
       method: 'POST',
       body: JSON.stringify({
-        expiresInNDays,
+        expiresAfter,
         maxUsages: hasUnlimitedUses ? -1 : maxUsages,
         watchlistId: $watchlistStore.id,
       }),
@@ -56,8 +57,14 @@
   {/if}
 
   <div class="form-control my-2">
-    <label class="label-text" for="validForNDays">Expires in (days)</label>
-    <input {disabled} class="input" type="number" bind:value={expiresInNDays} id="validForNDays" name="validForNDays" />
+    <label class="label-text" for="expiresAfter">Expires after</label>
+    <select class="select select-bordered" bind:value={expiresAfter} id="expiresAfter" name="expiresAfter">
+      {#each expiryOptions as expiryOption (expiryOption.hours)}
+        <option selected={expiryOption.hours === expiresAfter} value={expiryOption.hours}>
+          {expiryOption.label}
+        </option>
+      {/each}
+    </select>
   </div>
 
   <div>

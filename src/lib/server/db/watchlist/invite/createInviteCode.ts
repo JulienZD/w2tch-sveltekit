@@ -3,15 +3,16 @@ import { prisma } from '$lib/server/db';
 import { handlePrismaClientError } from '$lib/server/db/errors';
 import { randomUUID } from 'node:crypto';
 import { isInviteValid } from '$lib/server/util/isInviteValid';
+import { addMsToDate } from '$lib/util/time';
 
 interface InviteCodeOptions {
   maxUsages: number;
-  expiresInNDays: number;
+  expiresAfterInMs: number;
 }
 
 const defaultOptions: InviteCodeOptions = {
   maxUsages: -1,
-  expiresInNDays: 7,
+  expiresAfterInMs: 7,
 };
 
 export const getOrCreateInviteCode = async (watchlistId: string, options?: InviteCodeOptions) => {
@@ -36,13 +37,13 @@ const _getOrCreateInviteCode = async (watchlistId: string, options: InviteCodeOp
     return existingInvite.inviteCode;
   }
 
-  const { expiresInNDays, maxUsages: remainingUses } = {
+  const { expiresAfterInMs, maxUsages: remainingUses } = {
     ...defaultOptions,
     ...options,
   };
 
   const inviteCode = await getUniqueInviteCode();
-  const validUntil = getNowPlusNDays(expiresInNDays);
+  const validUntil = addMsToDate(new Date(), expiresAfterInMs);
 
   await prisma.watchlistInvite.upsert({
     where: {
@@ -79,13 +80,4 @@ const getUniqueInviteCode = async (): Promise<string> => {
   }
 
   return inviteCode;
-};
-
-const getNowPlusNDays = (days: number) => {
-  const now = new Date();
-
-  const validUntil = new Date(now);
-  validUntil.setDate(now.getDate() + days);
-
-  return validUntil;
 };

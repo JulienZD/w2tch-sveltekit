@@ -1,6 +1,8 @@
+import { expiryOptionsInHours } from '$lib/models/invite';
 import { DatabaseError, PrismaError } from '$lib/server/db/errors';
 import { getWatchlist } from '$lib/server/db/watchlist';
 import { getOrCreateInviteCode } from '$lib/server/db/watchlist/invite';
+import { hoursToMs } from '$lib/util/time';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -18,7 +20,10 @@ export const POST: RequestHandler = async ({ request, locals, url }) => {
   const result = z
     .object({
       watchlistId: z.string(),
-      expiresInNDays: z.number().positive(),
+      expiresAfter: z
+        .number()
+        .refine((n) => expiryOptionsInHours.includes(n))
+        .transform(hoursToMs),
       maxUsages: z.literal(-1).or(z.number().positive()),
     })
     .safeParse(body);
@@ -45,7 +50,7 @@ export const POST: RequestHandler = async ({ request, locals, url }) => {
   }
 
   try {
-    const inviteCode = await getOrCreateInviteCode(watchlistId, data);
+    const inviteCode = await getOrCreateInviteCode(watchlistId, { ...data, expiresAfterInMs: data.expiresAfter });
 
     return json({ inviteLink: `${url.origin}/invite/${inviteCode}` });
   } catch (error) {
