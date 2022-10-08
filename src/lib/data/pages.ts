@@ -1,1 +1,1 @@
-export const pagesWithoutHeader = ['/', '/invite/*'];
+export const pagesWithoutHeader = ['/', '/join/*'];

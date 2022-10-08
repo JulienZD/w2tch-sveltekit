@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhanceWithLoader } from '$lib/actions/enhanceWithLoader';
   import Pluralize from '$lib/components/Pluralize.svelte';
+  import Seo from '$lib/components/SEO.svelte';
   import WatchlistInviteContent from '$lib/components/watchlist/WatchlistInviteContent.svelte';
   import { writable } from 'svelte/store';
   import type { ActionData, PageData } from './$types';
@@ -15,6 +16,15 @@
   $: isInviteAcceptSuccessful = form && 'success' in form && form.success;
   $: formError = form && 'error' in form && form.error;
 </script>
+
+{#if invite}
+  <Seo
+    title="Watchlist invite"
+    description={`${invite.invitedBy} has invited you to join their watchlist:\n\n${invite.watchlist.name}`}
+  />
+{:else}
+  <Seo title="Invite expired" description="This invitation seems to be expired or invalid." />
+{/if}
 
 {#if !invite}
   <WatchlistInviteContent title="Invite Not Found">

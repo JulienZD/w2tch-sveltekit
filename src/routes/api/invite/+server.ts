@@ -52,7 +52,7 @@ export const POST: RequestHandler = async ({ request, locals, url }) => {
   try {
     const inviteCode = await getOrCreateInviteCode(watchlistId, { ...data, expiresAfterInMs: data.expiresAfter });
 
-    return json({ inviteLink: `${url.origin}/invite/${inviteCode}` });
+    return json({ inviteLink: `${url.origin}/join/${inviteCode}` });
   } catch (error) {
     // This should never happen, as we already determined the watchlist's existence prior to getting here
     if (error instanceof DatabaseError && error.message === PrismaError.NO_RELATION_FOUND) {

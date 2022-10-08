@@ -6,14 +6,13 @@ import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-  if (!locals.user) throw error(401, 'Unauthorized');
-
   const inviteCode = params.code;
-  if (!inviteCode) throw error(404, 'no code');
+  if (!inviteCode) throw error(404, 'Missing invite code');
+
   const invite = await getInvite(inviteCode);
 
   let isExistingMember = false;
-  if (invite) {
+  if (invite && locals.user) {
     const watchlist = await getWatchlist(invite?.watchlist.id, locals.user.id);
     isExistingMember = !!watchlist;
   }
