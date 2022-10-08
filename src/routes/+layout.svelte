@@ -2,8 +2,10 @@
   import { browser } from '$app/environment';
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
+  import AccountRequired from '$lib/components/AccountRequired.svelte';
   import Header from '$lib/components/ui/Header.svelte';
   import TemporaryAccountAlert from '$lib/components/ui/TemporaryAccountAlert.svelte';
+  import { accountRequired } from '$lib/stores/accountRequired';
   import { appModal } from '$lib/stores/modal';
   import ModalPortal from '@svelte-put/modal/ModalPortal.svelte';
   import { onMount } from 'svelte';
@@ -35,26 +37,30 @@
   });
 </script>
 
-{#if showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn}
-  <div class="container px-2 md:px-0 max-w-4xl fixed bottom-4 left-0 right-0 z-50">
-    <TemporaryAccountAlert temporaryAccountExpiresOn={data.temporaryAccountExpiresOn} />
-  </div>
-{/if}
+<div class="h-full" class:overflow-hidden={$accountRequired && !$page.data.user}>
+  <AccountRequired />
 
-<div class={`container px-2 md:px-0 h-full relative ${isHomePage ? '' : 'max-w-none md:max-w-3xl md:mx-auto'}`}>
-  {#if data.user}
-    <Header />
+  {#if showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn}
+    <div class="container px-2 md:px-0 max-w-4xl fixed bottom-4 left-0 right-0 z-50">
+      <TemporaryAccountAlert temporaryAccountExpiresOn={data.temporaryAccountExpiresOn} />
+    </div>
   {/if}
-  <main
-    class={`${isHomePage ? '' : 'h-full pt-4 md:pt-32'} ${
-      showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
-    }`}
-  >
-    <slot />
-  </main>
-</div>
 
-<ModalPortal store={appModal} />
+  <div class={`container px-2 md:px-0 h-full relative ${isHomePage ? '' : 'max-w-none md:max-w-3xl md:mx-auto'}`}>
+    {#if data.user}
+      <Header />
+    {/if}
+    <main
+      class={`${isHomePage ? '' : 'h-full pt-4 md:pt-32'} ${
+        showTemporaryAccountBanner && !!data.temporaryAccountExpiresOn ? 'pb-20' : ''
+      }`}
+    >
+      <slot />
+    </main>
+  </div>
+
+  <ModalPortal store={appModal} />
+</div>
 
 <style lang="postcss">
   :global(html[data-theme='winter']) {

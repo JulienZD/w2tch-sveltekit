@@ -1,11 +1,12 @@
 import { ACCESS_TOKEN } from '$lib/constants';
 import { prisma } from '$lib/server/db';
 import { createJWT } from '$lib/server/util/createJWT';
-import { error, json, type RequestHandler } from '@sveltejs/kit';
+import { error, json, redirect, type RequestHandler } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
+// TODO: Remove - unused
+export const POST: RequestHandler = async ({ request, cookies, url }) => {
   const body = await request.json();
 
   const result = z
@@ -54,6 +55,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     expires: oneMonthFromNow,
     path: '/',
   });
+
+  const returnUrl = url.searchParams.get('returnUrl');
+  if (returnUrl?.startsWith('/')) {
+    throw redirect(302, returnUrl);
+  }
 
   return json(user, { status: 201 });
 };

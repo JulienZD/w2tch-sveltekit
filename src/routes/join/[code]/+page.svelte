@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { enhanceWithLoader } from '$lib/actions/enhanceWithLoader';
   import Pluralize from '$lib/components/Pluralize.svelte';
   import Seo from '$lib/components/SEO.svelte';
   import WatchlistInviteContent from '$lib/components/watchlist/WatchlistInviteContent.svelte';
+  import { accountRequired } from '$lib/stores/accountRequired';
+  import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import type { ActionData, PageData } from './$types';
 
@@ -15,6 +18,10 @@
 
   $: isInviteAcceptSuccessful = form && 'success' in form && form.success;
   $: formError = form && 'error' in form && form.error;
+
+  onMount(() => {
+    accountRequired.set(!$page.data.user);
+  });
 </script>
 
 {#if invite}
