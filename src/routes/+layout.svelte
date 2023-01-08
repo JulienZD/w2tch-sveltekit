@@ -62,4 +62,9 @@
   :global(html[data-theme='night']) {
     @apply bg-gradient-to-tr from-transparent to-blue-900;
   }
+
+  :global(html) {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
 </style>
