@@ -130,6 +130,30 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@svelte-put/clickoutside@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@svelte-put/clickoutside/-/clickoutside-1.0.3.tgz#a933501c85be83bd94f0fab9d77cb4f7a69f60d6"
+  integrity sha512-L6H/DzHoDfna+QYGrh/97ndBZ4s9B0UQlTjcPnCsfdBFzM0iBeRITxtGOpF/KAMFRxDP23lvfiXDwIx5UThkWQ==
+
+"@svelte-put/modal@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@svelte-put/modal/-/modal-0.5.4.tgz#ea91782ccdd8c0426096dd3676f3c3a7e7cc3679"
+  integrity sha512-QUAxOL/MP7exie7tMPKcIlTvXN9ZXC9EFGDVtuT9U6OSvUNzxz4LjWUCcFZqOgpG0J2R9R7iV/mfknSvr5xcyA==
+  dependencies:
+    "@svelte-put/clickoutside" "^1.0.3"
+    "@svelte-put/movable" "^1.2.1"
+    "@svelte-put/shortcut" "^1.0.2"
+
+"@svelte-put/movable@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@svelte-put/movable/-/movable-1.2.1.tgz#6cabe0f62ebb8687943ef9a15e5b6706bef0d315"
+  integrity sha512-ha5kWB8FPmT2lgwsEue0BMx5oByLQ1zm/CFzrL9262T6qSd42aaHWruJGxee1OdfeB0A/HdA1cIkGX+SSWC8Ig==
+
+"@svelte-put/shortcut@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@svelte-put/shortcut/-/shortcut-1.0.2.tgz#6f38b14a8d06799f6f4a8dbcd18da9d85cc25faf"
+  integrity sha512-7psnL+dkT+6HiCORTbyX2jJmwAbhVqpl3aTGNTabsyHuby9E4xYqLml1eqW6AZzUZD6ddU7ldzDa6s36jGFQrQ==
+
 "@sveltejs/adapter-vercel@^1.0.0-next.76":
   version "1.0.0-next.76"
   resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.76.tgz#4749413080a187c14995d7f74176899c18824c1b"

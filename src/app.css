@@ -12,4 +12,22 @@
   .input::placeholder {
     color: theme(colors.base-content / 65%);
   }
+
+  /* Default tooltip placement, for some reason this isn't included by default */
+  .tooltip-top:before {
+    transform: translateX(-50%);
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: var(--tooltip-offset);
+  }
+
+  .tooltip-top:after {
+    transform: translateX(-50%);
+    border-color: transparent transparent transparent var(--tooltip-color);
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: calc(var(--tooltip-tail-offset) + 1px);
+  }
 }
